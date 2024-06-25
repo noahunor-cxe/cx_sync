@@ -1,0 +1,18 @@
+name: <+stage.variables.name>
+replicas: 2
+
+image: <+artifact.image>
+
+createNamespace: true
+namespace: <+infra.namespace>
+
+serviceType: LoadBalancer
+
+servicePort: 80
+serviceTargetPort: 80
+
+env: 
+  config:
+    key1: value10
+  secrets:
+    key2: value2
