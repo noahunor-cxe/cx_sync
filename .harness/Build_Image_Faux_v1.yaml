@@ -1,0 +1,67 @@
+template:
+  name: Build Image - Faux
+  identifier: Build_Image_Faux
+  versionLabel: v1
+  type: Stage
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    type: Deployment
+    spec:
+      deploymentType: Ssh
+      environment:
+        environmentRef: <+input>
+        deployToAll: false
+        environmentInputs: <+input>
+        serviceOverrideInputs: <+input>
+        infrastructureDefinitions: <+input>
+      service:
+        serviceRef: <+input>
+        serviceInputs: <+input>
+      execution:
+        steps:
+          - step:
+              type: ShellScript
+              name: Build Image
+              identifier: Build_Image
+              spec:
+                shell: Bash
+                executionTarget: {}
+                source:
+                  type: Inline
+                  spec:
+                    script: |-
+                      echo "--- Artifact ---"
+                      echo "Filter: [<+stage.variables.ArtifactFilter>]"
+                      echo "URL-Orig: [<+artifacts.primary.metadata.url>]"
+                      echo "URL-Null: [<+ <+artifacts.primary.metadata.url> == null ? '' : <+artifacts.primary.metadata.url>>]"
+                      echo "URL-Emty: [<+ empty(<+artifacts.primary.metadata.url>) ? '' : <+artifacts.primary.metadata.url>>]"
+
+                      echo "--- Craig ---"
+                      echo "Empty: [<+empty(stage.variables.ArtifactFilter)>]"
+                      echo "Null: [<+stage.variables.ArtifactFilter == null>]"
+                      echo "Zip?: [<+stage.variables.ArtifactFilter.contains('.zip')>]"
+                      echo "Value: [<+empty(stage.variables.ArtifactFilter) ? '**/*.zip' : stage.variables.ArtifactFilter>]"
+                      echo "ValueDbl: [<+empty(stage.variables.ArtifactFilter) ? '**/*.zip' : <+stage.variables.ArtifactFilter>>]"
+
+                      echo "--- Harness ---"
+                      echo "Empty: [<+empty(<+stage.variables.ArtifactFilter>)>]"
+                      echo "Null: [<+<+stage.variables.ArtifactFilter> == null>]"
+                      echo "Value: [<+empty(<+stage.variables.ArtifactFilter>) ? '**/*.zip' : <+stage.variables.ArtifactFilter>>]"
+                environmentVariables: []
+                outputVariables: []
+              timeout: 45m
+        rollbackSteps: []
+    failureStrategies:
+      - onFailure:
+          errors:
+            - AllErrors
+          action:
+            type: StageRollback
+    variables:
+      - name: ArtifactFilter
+        type: String
+        description: Pattern used to find the artifact to deploy. Defaults to the latest artifact. Format "*/ARTIFACT-NAME.EXT"
+        required: false
+        value: <+input>
