@@ -1,0 +1,26 @@
+template:
+  name: Checkmarx_scan
+  type: StepGroup
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  spec:
+    steps: []
+    variables:
+      - name: GROUPS
+        type: String
+        value: <+variable.CX_PROJECT_GROUPS>
+        description: ""
+        required: false
+      - name: SAST_FLAGS
+        type: String
+        value: <+variable.CX_PROJECT_EXTRA_FLAGS>
+        description: ""
+        required: false
+      - name: TAGS
+        type: String
+        value: <+variable.CX_PROJECT_TAGS>
+        description: ""
+        required: false
+    stageType: CI
+  identifier: Checkmarx_scan
+  versionLabel: v1
