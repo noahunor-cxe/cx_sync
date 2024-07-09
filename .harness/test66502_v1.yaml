@@ -38,3 +38,5 @@ template:
                 }
             ]
         }
+      delegateSelectors:
+        - helm-delegate
