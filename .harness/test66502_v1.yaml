@@ -1,0 +1,40 @@
+template:
+  name: test-66502
+  identifier: test66502
+  versionLabel: v1
+  type: Step
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    type: Http
+    timeout: 10s
+    spec:
+      url: https://app.harness.io/ng/account/oP3BKzKwSDe_4hCFYw_UWA/module/ci/orgs/SDTK/projects/jokesservice/pipelines/All_in_One_Pipeline/executions/aeK8q_1PSwCc3iT-AetSbg/pipeline?stage=LyoB1EWuR-mKBHww-qHmUg&&step=vlI2RaV3RwiJ3_fyCTz9bA&childStage=&stageExecId=
+      method: POST
+      headers: []
+      inputVariables:
+        - name: routing_key
+          value: <+input>
+          type: String
+        - name: summary
+          value: <+input>
+          type: String
+        - name: build_url
+          value: <+input>
+          type: String
+      outputVariables: []
+      requestBody: |
+        {
+            "routing_key": "<+spec.inputVariables.routing_key>",
+            "payload": {
+                "summary": "<+spec.inputVariables.summary>",
+                "source": "harness"
+            },
+            "links": [
+                {
+                    "href": "<+spec.inputVariables.build_url>",
+                    "text": "View more details in Harness"
+                }
+            ]
+        }
