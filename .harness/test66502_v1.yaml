@@ -18,7 +18,7 @@ template:
           value: <+input>
           type: String
         - name: summary
-          value: <+input>
+          value: <+pipeline.name> build <+pipeline.buildNumber> failed
           type: String
         - name: build_url
           value: <+input>
