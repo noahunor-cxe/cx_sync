@@ -11,7 +11,7 @@ template:
     timeout: 10s
     spec:
       url: https://app.harness.io/ng/account/oP3BKzKwSDe_4hCFYw_UWA/module/ci/orgs/SDTK/projects/jokesservice/pipelines/All_in_One_Pipeline/executions/aeK8q_1PSwCc3iT-AetSbg/pipeline?stage=LyoB1EWuR-mKBHww-qHmUg&&step=vlI2RaV3RwiJ3_fyCTz9bA&childStage=&stageExecId=
-      method: POST
+      method: GET
       headers: []
       inputVariables:
         - name: routing_key
