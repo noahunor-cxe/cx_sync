@@ -3,7 +3,25 @@ service:
   identifier: tst
   serviceDefinition:
     type: Kubernetes
-    spec: {}
+    spec:
+      manifests:
+        - manifest:
+            identifier: Manifest
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: testconn
+                  gitFetchType: Branch
+                  paths:
+                    - service.yaml
+                  repoName: cx_sync
+                  branch: main
+              valuesPaths:
+                - values.yaml
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
   gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: bootcampcinoahunor
