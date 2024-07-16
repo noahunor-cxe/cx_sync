@@ -65,3 +65,9 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+        variables:
+          - name: tst
+            type: String
+            description: ""
+            required: false
+            value: <+stage.variables.VARIABLE_NAME>
