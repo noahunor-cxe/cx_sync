@@ -1,0 +1,22 @@
+template:
+  name: test-HTTP
+  type: Step
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  spec:
+    type: Http
+    spec:
+      url: https://jsonplaceholder.typicode.com/posts
+      method: POST
+      headers:
+        - key: content-type
+          value: application/json
+      inputVariables:
+        - name: message
+          value: <+input>
+          type: String
+      outputVariables: []
+      requestBody: "{             \"message\": \"<+spec.inputVariables.message>\"          }"
+    timeout: 10s
+  identifier: testHTTP
+  versionLabel: v1
