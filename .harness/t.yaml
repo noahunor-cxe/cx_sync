@@ -22,6 +22,18 @@ service:
                 - values.yaml
               skipResourceVersioning: false
               enableDeclarativeRollback: false
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: test9
+                artifactPath: <+input>
+                tag: <+input>
+                repository: kendockerapiv2
+                repositoryFormat: docker
+              identifier: tst
+              type: ArtifactoryRegistry
   gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: bootcampcinoahunor
