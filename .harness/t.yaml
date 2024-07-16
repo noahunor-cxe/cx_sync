@@ -1,0 +1,9 @@
+service:
+  name: tst
+  identifier: tst
+  serviceDefinition:
+    type: Kubernetes
+    spec: {}
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: bootcampcinoahunor
