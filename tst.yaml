@@ -1,0 +1,75 @@
+pipeline:
+  name: test_serverless_step_group
+  identifier: test_serverless_step_group
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: test
+        identifier: test
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: tst
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: tst
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tst
+          execution:
+            steps:
+              - stepGroup:
+                  name: Serverless Step Group
+                  identifier: Serverless_Step_Group
+                  steps:
+                    - step:
+                        type: DownloadManifests
+                        name: DownloadManifests
+                        identifier: DownloadManifests
+                        spec: {}
+                        timeout: 10m
+                    - step:
+                        type: ServerlessAwsLambdaPrepareRollbackV2
+                        name: Serverless Aws Lambda Prepare Rollback
+                        identifier: Serverless_Aws_Lambda_Prepare_Rollback
+                        spec:
+                          connectorRef: account.harnessImage
+                        timeout: 10m
+                    - step:
+                        type: ServerlessAwsLambdaPackageV2
+                        name: ServerlessAwsLambdaPackageV2_1
+                        identifier: ServerlessAwsLambdaPackageV2_1
+                        spec:
+                          connectorRef: account.AWS_Connector
+                        timeout: 10m
+                    - step:
+                        type: ServerlessAwsLambdaDeployV2
+                        name: ServerlessAwsLambdaDeployV2_1
+                        identifier: ServerlessAwsLambdaDeployV2_1
+                        spec:
+                          connectorRef: account.AWS_Connector
+                        timeout: 10m
+                  stepGroupInfra:
+                    type: KubernetesDirect
+                    spec:
+                      connectorRef: account.testk8s
+            rollbackSteps: []
+        tags: {}
+        delegateSelectors:
+          - helm-delegate
+        failureStrategies:
+          - onFailure:
+              errors: []
+              action:
+                type: StageRollback
