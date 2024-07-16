@@ -1,4 +1,4 @@
-name: <+stage.variables.name>
+name: <+stage.variables.VARIABLE_NAME>
 replicas: 2
 
 image: <+artifacts.primary.image>
