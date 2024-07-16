@@ -45,6 +45,14 @@ pipeline:
                         identifier: Serverless_Aws_Lambda_Prepare_Rollback
                         spec:
                           connectorRef: account.harnessImage
+                          envVariables:
+                            PLUGIN_AWS_ROLE_ARN: <+pipeline.variables.deploy_role_arn>
+                          serverlessVersion: <+pipeline.variables.serverless_version>
+                          imagePullPolicy: Always
+                          resources:
+                            limits:
+                              memory: 2G
+                          image: noahunor1854/nginx
                         timeout: 10m
                     - step:
                         type: ServerlessAwsLambdaPackageV2
