@@ -70,6 +70,7 @@ pipeline:
           - helm-delegate
         failureStrategies:
           - onFailure:
-              errors: []
+              errors:
+                - AllErrors
               action:
                 type: StageRollback
