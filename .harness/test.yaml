@@ -41,7 +41,7 @@ pipeline:
                         inputVariables:
                           - name: message
                             type: String
-                            value: Some message with one plain variable <+pipeline.name> and one variable in brackets (<+pipeline.executionUrl>)
+                            value: Some message with one plain variable <+pipeline.name>
             rollbackSteps:
               - step:
                   name: Rollback Rollout Deployment
