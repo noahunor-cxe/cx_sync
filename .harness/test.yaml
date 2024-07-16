@@ -1,0 +1,59 @@
+pipeline:
+  name: tst
+  identifier: tst
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: tst
+        identifier: tst
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: tst
+          environment:
+            environmentRef: tst
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tst
+          execution:
+            steps:
+              - step:
+                  name: Rollout Deployment
+                  identifier: rolloutDeployment
+                  type: K8sRollingDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+              - step:
+                  name: Test Bug
+                  identifier: Test_Bug
+                  template:
+                    templateRef: testHTTP
+                    versionLabel: v1
+                    templateInputs:
+                      type: Http
+                      spec:
+                        inputVariables:
+                          - name: message
+                            type: String
+                            value: Some message with one plain variable <+pipeline.name> and one variable in brackets (<+pipeline.executionUrl>)
+            rollbackSteps:
+              - step:
+                  name: Rollback Rollout Deployment
+                  identifier: rollbackRolloutDeployment
+                  type: K8sRollingRollback
+                  timeout: 10m
+                  spec:
+                    pruningEnabled: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
