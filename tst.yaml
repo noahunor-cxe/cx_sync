@@ -114,3 +114,5 @@ pipeline:
         connectorRef: testconn
         repoName: cx_sync
         build: <+input>
+  delegateSelectors:
+    - helm-delegate
