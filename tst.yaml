@@ -28,7 +28,7 @@ pipeline:
                   identifier: Assume_Role
                   spec:
                     connectorRef: account.harnessImage
-                    image: noah1854/nginx
+                    image: nginx
                     shell: Sh
                     command: echo "Assuming Role"
     - stage:
