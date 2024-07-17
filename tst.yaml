@@ -6,6 +6,41 @@ pipeline:
   tags: {}
   stages:
     - stage:
+        name: Build
+        identifier: Build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.testk8s
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Assume Role
+                  identifier: Assume_Role
+                  spec:
+                    connectorRef: <+pipeline.variables.container_registry>
+                    image: <+pipeline.variables.image>
+                    shell: Sh
+                    command: echo "Assuming Role"
+              - step:
+                  type: Run
+                  name: Install Dependencies
+                  identifier: Install_Dependencies
+                  spec:
+                    connectorRef: <+pipeline.variables.container_registry>
+                    image: <+pipeline.variables.image>
+                    shell: Sh
+                    command: echo "Hello World"
+    - stage:
         name: test
         identifier: test
         description: ""
@@ -82,41 +117,6 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
-    - stage:
-        name: Build
-        identifier: Build
-        description: ""
-        type: CI
-        spec:
-          cloneCodebase: true
-          infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: account.testk8s
-              namespace: default
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              os: Linux
-          execution:
-            steps:
-              - step:
-                  type: Run
-                  name: Assume Role
-                  identifier: Assume_Role
-                  spec:
-                    connectorRef: <+pipeline.variables.container_registry>
-                    image: <+pipeline.variables.image>
-                    shell: Sh
-                    command: echo "Assuming Role"
-              - step:
-                  type: Run
-                  name: Install Dependencies
-                  identifier: Install_Dependencies
-                  spec:
-                    connectorRef: <+pipeline.variables.container_registry>
-                    image: <+pipeline.variables.image>
-                    shell: Sh
-                    command: echo "Hello World"
   properties:
     ci:
       codebase:
