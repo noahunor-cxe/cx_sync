@@ -1,0 +1,41 @@
+template:
+  name: ENV_VAR
+  identifier: ENV_VAR
+  versionLabel: v1
+  type: Step
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    type: Container
+    spec:
+      connectorRef: account.harnessImage
+      image: nginx
+      command: echo "Hello World"
+      shell: Bash
+      infrastructure:
+        type: KubernetesDirect
+        spec:
+          connectorRef: account.testk8s
+          namespace: default
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 500Mi
+          annotations: {}
+          labels: {}
+          containerSecurityContext:
+            capabilities:
+              drop: []
+              add: []
+          nodeSelector: {}
+      reports:
+        type: JUnit
+        spec:
+          paths: []
+      outputVariables: []
+      envVariables:
+        HOSTNAME: <+input>
+        USERNAME: noahunor1854
+        PASSWORD: <+secrets.getValue("account.ltm_password")>
+    timeout: 10m
