@@ -1,0 +1,112 @@
+pipeline:
+  name: test-SAM
+  identifier: testSAM
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: testconn
+        repoName: cx_sync
+        build: <+input>
+  stages:
+    - stage:
+        name: tst1
+        identifier: tst1
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.testk8s
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - stepGroup:
+                  name: tst
+                  identifier: tst
+                  steps:
+                    - step:
+                        type: Run
+                        name: Run_1
+                        identifier: Run_1
+                        spec:
+                          connectorRef: account.AWS_Connector
+                          image: nginx
+                          shell: Bash
+                          command: echo "hello world"
+                  variables:
+                    - name: tst
+                      type: String
+                      value: <+input>
+                      description: ""
+                      required: false
+    - stage:
+        name: tst2
+        identifier: tst2
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: tst
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: tst
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tst
+          execution:
+            steps:
+              - stepGroup:
+                  name: tst
+                  identifier: tst
+                  steps:
+                    - step:
+                        type: ShellScript
+                        name: ShellScript_1
+                        identifier: ShellScript_1
+                        spec:
+                          shell: Bash
+                          executionTarget: {}
+                          source:
+                            type: Inline
+                            spec:
+                              script: echo "Hello World"
+                          environmentVariables: []
+                          outputVariables: []
+                        timeout: 10m
+                  variables:
+                    - name: name
+                      type: String
+                      value: <+input>
+                      description: ""
+                      required: false
+            rollbackSteps:
+              - step:
+                  name: Rollback Rollout Deployment
+                  identifier: rollbackRolloutDeployment
+                  type: K8sRollingRollback
+                  timeout: 10m
+                  spec:
+                    pruningEnabled: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
