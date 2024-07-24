@@ -37,7 +37,7 @@ pipeline:
                         name: Run_1
                         identifier: Run_1
                         spec:
-                          connectorRef: account.AWS_Connector
+                          connectorRef: account.harnessImage
                           image: nginx
                           shell: Bash
                           command: echo "hello world"
