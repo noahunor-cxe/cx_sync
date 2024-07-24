@@ -29,12 +29,12 @@ pipeline:
           execution:
             steps:
               - stepGroup:
-                  name: tst
+                  name: sam_step_group
                   identifier: tst
                   steps:
                     - step:
                         type: Run
-                        name: Run_1
+                        name: sam_step_group
                         identifier: Run_1
                         spec:
                           connectorRef: account.harnessImage
@@ -72,12 +72,12 @@ pipeline:
           execution:
             steps:
               - stepGroup:
-                  name: tst
+                  name: sam_step_group
                   identifier: tst
                   steps:
                     - step:
                         type: ShellScript
-                        name: ShellScript_1
+                        name: sam_step_group
                         identifier: ShellScript_1
                         spec:
                           shell: Bash
