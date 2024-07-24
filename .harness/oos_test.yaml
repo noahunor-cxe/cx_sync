@@ -1,0 +1,28 @@
+pipeline:
+  name: oos test
+  identifier: oos_test
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: tst
+        identifier: tst
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  name: test
+                  identifier: test
+                  template:
+                    templateRef: F5_Operations_Step
+                    versionLabel: v1
+                    templateInputs:
+                      type: Container
+                      spec:
+                        envVariables:
+                          HOSTNAME: <+input>
+                          USERNAME: <+input>
+        tags: {}
