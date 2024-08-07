@@ -1,0 +1,24 @@
+pipeline:
+  name: parentpipeline
+  identifier: parentpipeline
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: tst
+        identifier: tst
+        description: ""
+        type: Pipeline
+        spec:
+          org: default
+          pipeline: childpipeline
+          project: bootcampcinoahunor
+          inputSetReferences:
+            - tstinputset
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
