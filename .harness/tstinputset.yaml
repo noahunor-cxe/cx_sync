@@ -1,0 +1,26 @@
+inputSet:
+  name: tstinputset
+  identifier: tstinputset
+  orgIdentifier: default
+  projectIdentifier: bootcampcinoahunor
+  pipeline:
+    identifier: childpipeline
+    stages:
+      - stage:
+          identifier: tst
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: tst
+                        sources:
+                          - identifier: tst
+                            type: ArtifactoryRegistry
+                            spec:
+                              artifactPath: delegate
+                              tag: k1
