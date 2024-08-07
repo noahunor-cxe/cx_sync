@@ -1,0 +1,53 @@
+pipeline:
+  name: childpipeline
+  identifier: childpipeline
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: tst
+        identifier: tst
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: tst
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: tst
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tst
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: echo "Hello World"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
