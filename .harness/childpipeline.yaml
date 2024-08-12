@@ -44,7 +44,8 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
-        tags: {}
+        tags:
+          Ancestry: ""
         failureStrategies:
           - onFailure:
               errors:
