@@ -47,6 +47,11 @@ pipeline:
                       value: <+input>
                       description: ""
                       required: false
+          caching:
+            enabled: false
+            paths: []
+        tags:
+          Ancestry: ""
     - stage:
         name: tst2
         identifier: tst2
