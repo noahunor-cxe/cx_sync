@@ -33,70 +33,75 @@ pipeline:
                   name: tst1
                   identifier: tst1
                   steps:
-                    - step:
-                        type: Container
-                        name: tst1
-                        identifier: tst1
-                        spec:
-                          connectorRef: account.harnessImage
-                          image: nginx
-                          command: echo "Hello World"
-                          shell: Bash
-                          infrastructure:
-                            type: KubernetesDirect
+                    - parallel:
+                        - step:
+                            type: Container
+                            name: tst1
+                            identifier: tst1
                             spec:
-                              connectorRef: account.testk8s
-                              namespace: default
-                              resources:
-                                limits:
-                                  cpu: "0.5"
-                                  memory: 500Mi
-                              annotations: {}
-                              labels: {}
-                              containerSecurityContext:
-                                capabilities:
-                                  drop: []
-                                  add: []
-                              nodeSelector: {}
-                          reports:
-                            type: JUnit
+                              connectorRef: account.harnessImage
+                              image: nginx
+                              command: echo "Hello World"
+                              shell: Bash
+                              infrastructure:
+                                type: KubernetesDirect
+                                spec:
+                                  connectorRef: account.testk8s
+                                  namespace: default
+                                  resources:
+                                    limits:
+                                      cpu: "0.5"
+                                      memory: 500Mi
+                                  annotations: {}
+                                  labels: {}
+                                  containerSecurityContext:
+                                    capabilities:
+                                      drop: []
+                                      add: []
+                                  nodeSelector: {}
+                              reports:
+                                type: JUnit
+                                spec:
+                                  paths: []
+                              outputVariables: []
+                              envVariables: {}
+                            timeout: 5m
+                        - step:
+                            type: Container
+                            name: tst2
+                            identifier: tst2
                             spec:
-                              paths: []
-                          outputVariables: []
-                          envVariables: {}
-                        timeout: 5m
-                    - step:
-                        type: Container
-                        name: tst2
-                        identifier: tst2
-                        spec:
-                          connectorRef: account.harnessImage
-                          image: nginx
-                          command: echo "Hello World"
-                          shell: Bash
-                          infrastructure:
-                            type: KubernetesDirect
-                            spec:
-                              connectorRef: account.testk8s
-                              namespace: default
-                              resources:
-                                limits:
-                                  cpu: "0.5"
-                                  memory: 500Mi
-                              annotations: {}
-                              labels: {}
-                              containerSecurityContext:
-                                capabilities:
-                                  drop: []
-                                  add: []
-                              nodeSelector: {}
-                          reports:
-                            type: JUnit
-                            spec:
-                              paths: []
-                          outputVariables: []
-                          envVariables: {}
-                        timeout: 5m
+                              connectorRef: account.harnessImage
+                              image: nginx
+                              command: echo "Hello World"
+                              shell: Bash
+                              infrastructure:
+                                type: KubernetesDirect
+                                spec:
+                                  connectorRef: account.testk8s
+                                  namespace: default
+                                  resources:
+                                    limits:
+                                      cpu: "0.5"
+                                      memory: 500Mi
+                                  annotations: {}
+                                  labels: {}
+                                  containerSecurityContext:
+                                    capabilities:
+                                      drop: []
+                                      add: []
+                                  nodeSelector: {}
+                              reports:
+                                type: JUnit
+                                spec:
+                                  paths: []
+                              outputVariables: []
+                              envVariables: {}
+                            timeout: 5m
+                  stepGroupInfra:
+                    type: KubernetesDirect
+                    spec:
+                      connectorRef: account.testk8s
             rollbackSteps: []
         tags: {}
         failureStrategies:
