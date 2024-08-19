@@ -1,0 +1,110 @@
+pipeline:
+  name: tst_stepgroup
+  identifier: tst_stepgroup
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: tst-stepgroup
+        identifier: tst
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: tst
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: tst
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tst
+          execution:
+            steps:
+              - stepGroup:
+                  name: tst1
+                  identifier: tst1
+                  steps:
+                    - parallel:
+                        - step:
+                            type: Container
+                            name: tst1
+                            identifier: tst1
+                            spec:
+                              connectorRef: account.harnessImage
+                              image: nginx
+                              command: echo "Hello World"
+                              shell: Bash
+                              infrastructure:
+                                type: KubernetesDirect
+                                spec:
+                                  connectorRef: account.testk8s
+                                  namespace: default
+                                  resources:
+                                    limits:
+                                      cpu: "0.5"
+                                      memory: 500Mi
+                                  annotations: {}
+                                  labels: {}
+                                  containerSecurityContext:
+                                    capabilities:
+                                      drop: []
+                                      add: []
+                                  nodeSelector: {}
+                              reports:
+                                type: JUnit
+                                spec:
+                                  paths: []
+                              outputVariables: []
+                              envVariables: {}
+                            timeout: 5m
+                        - step:
+                            type: Container
+                            name: tst2
+                            identifier: tst2
+                            spec:
+                              connectorRef: account.harnessImage
+                              image: nginx
+                              command: echo "Hello World"
+                              shell: Bash
+                              infrastructure:
+                                type: KubernetesDirect
+                                spec:
+                                  connectorRef: account.testk8s
+                                  namespace: default
+                                  resources:
+                                    limits:
+                                      cpu: "0.5"
+                                      memory: 500Mi
+                                  annotations: {}
+                                  labels: {}
+                                  containerSecurityContext:
+                                    capabilities:
+                                      drop: []
+                                      add: []
+                                  nodeSelector: {}
+                              reports:
+                                type: JUnit
+                                spec:
+                                  paths: []
+                              outputVariables: []
+                              envVariables: {}
+                            timeout: 5m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
+        delegateSelectors:
+          - helm-delegate
