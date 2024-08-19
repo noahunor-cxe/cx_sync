@@ -35,69 +35,23 @@ pipeline:
                   steps:
                     - parallel:
                         - step:
-                            type: Container
+                            type: Run
                             name: tst1
                             identifier: tst1
                             spec:
                               connectorRef: account.harnessImage
                               image: nginx
-                              command: echo "Hello World"
                               shell: Bash
-                              infrastructure:
-                                type: KubernetesDirect
-                                spec:
-                                  connectorRef: account.testk8s
-                                  namespace: default
-                                  resources:
-                                    limits:
-                                      cpu: "0.5"
-                                      memory: 500Mi
-                                  annotations: {}
-                                  labels: {}
-                                  containerSecurityContext:
-                                    capabilities:
-                                      drop: []
-                                      add: []
-                                  nodeSelector: {}
-                              reports:
-                                type: JUnit
-                                spec:
-                                  paths: []
-                              outputVariables: []
-                              envVariables: {}
-                            timeout: 5m
+                              command: echo "Hello World"
                         - step:
-                            type: Container
+                            type: Run
                             name: tst2
                             identifier: tst2
                             spec:
                               connectorRef: account.harnessImage
                               image: nginx
-                              command: echo "Hello World"
                               shell: Bash
-                              infrastructure:
-                                type: KubernetesDirect
-                                spec:
-                                  connectorRef: account.testk8s
-                                  namespace: default
-                                  resources:
-                                    limits:
-                                      cpu: "0.5"
-                                      memory: 500Mi
-                                  annotations: {}
-                                  labels: {}
-                                  containerSecurityContext:
-                                    capabilities:
-                                      drop: []
-                                      add: []
-                                  nodeSelector: {}
-                              reports:
-                                type: JUnit
-                                spec:
-                                  paths: []
-                              outputVariables: []
-                              envVariables: {}
-                            timeout: 5m
+                              command: echo "Hello World"
                   stepGroupInfra:
                     type: KubernetesDirect
                     spec:
