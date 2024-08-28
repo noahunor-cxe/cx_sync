@@ -12,4 +12,4 @@ template:
       shell: Bash
       command: echo "Hello World"
       envVariables:
-        name: <+input>
+        SPACE_SEPARATED_BUILD_OPTS: <+input>.executionInput()
