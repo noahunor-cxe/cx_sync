@@ -1,0 +1,15 @@
+template:
+  name: test-step
+  identifier: teststep
+  versionLabel: v1
+  type: Step
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    type: Run
+    spec:
+      shell: Bash
+      command: echo "Hello World"
+      envVariables:
+        name: <+input>
