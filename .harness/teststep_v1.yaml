@@ -9,6 +9,8 @@ template:
   spec:
     type: Run
     spec:
+      connectorRef: account.harnessImage
+      image: library/nginx
       shell: Bash
       command: echo "Hello World"
       envVariables:
