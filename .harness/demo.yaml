@@ -19,7 +19,8 @@ pipeline:
         spec:
           cloneCodebase: true
           caching:
-            enabled: true
+            enabled: false
+            paths: []
           infrastructure:
             type: KubernetesDirect
             spec:
@@ -35,11 +36,18 @@ pipeline:
                   name: Run_1
                   identifier: Run_1
                   spec:
-                    connectorRef: account.harnessImage
-                    image: library/nginx
+                    connectorRef: account.AWS_Connector
+                    image: 915632791698.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr-repo
                     shell: Bash
+                    command: |-
+                      echo "Hello World"
+                      aws s3 ls
+              - step:
+                  type: Run
+                  name: Run_2
+                  identifier: Run_2
+                  spec:
+                    connectorRef: account.AWS_Connector
+                    image: 915632791698.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr-repo
+                    shell: Sh
                     command: echo "Hello World"
-                    outputVariables:
-                      - name: PLUGIN_DRY_RUN
-                        type: String
-                        value: "true"
