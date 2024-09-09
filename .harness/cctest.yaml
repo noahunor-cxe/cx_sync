@@ -8,8 +8,9 @@ pipeline:
     ci:
       codebase:
         connectorRef: testconn
-        repoName: main
+        repoName: cx_sync
         build: <+input>
+        sparseCheckout: []
   stages:
     - stage:
         name: cc-runstep
@@ -53,3 +54,9 @@ pipeline:
                       value: you
                       description: ""
                       required: false
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
