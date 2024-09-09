@@ -15,3 +15,7 @@ template:
       command: echo "Hello World"
       envVariables:
         SPACE_SEPARATED_BUILD_OPTS: <+input>.executionInput()
+      outputVariables:
+        - name: iwiiwiw
+          type: Secret
+          value: jwiowoow
