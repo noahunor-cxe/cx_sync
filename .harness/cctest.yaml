@@ -1,0 +1,55 @@
+pipeline:
+  name: cc-test
+  identifier: cctest
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: testconn
+        repoName: main
+        build: <+input>
+  stages:
+    - stage:
+        name: cc-runstep
+        identifier: ccrunstep
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.testk8s
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - stepGroup:
+                  name: tst
+                  identifier: tst
+                  steps:
+                    - step:
+                        type: Run
+                        name: Run_1
+                        identifier: Run_1
+                        spec:
+                          connectorRef: account.harnessImage
+                          image: library/nginx
+                          shell: Bash
+                          command: echo "hello World"
+                          outputVariables:
+                            - name: yours
+                              type: Secret
+                              value: hhhhh
+                  variables:
+                    - name: name
+                      type: String
+                      value: you
+                      description: ""
+                      required: false
