@@ -34,5 +34,5 @@ template:
               type: String
               description: ""
               required: false
-              value: <+input>
+              value: <+input>.default(false).allowedValues(true,false)
   versionLabel: v2
