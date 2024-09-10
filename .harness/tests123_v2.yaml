@@ -1,0 +1,38 @@
+template:
+  name: tests123
+  identifier: tests123
+  type: Pipeline
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: tst
+          identifier: tst
+          description: ""
+          type: FeatureFlag
+          spec:
+            execution:
+              steps:
+                - step:
+                    type: ShellScript
+                    name: ShellScript_1
+                    identifier: ShellScript_1
+                    spec:
+                      shell: Bash
+                      executionTarget: {}
+                      source:
+                        type: Inline
+                        spec:
+                          script: echo "Hello World"
+                      environmentVariables: []
+                      outputVariables: []
+                    timeout: 10m
+          variables:
+            - name: flagID
+              type: String
+              description: ""
+              required: false
+              value: <+input>
+  versionLabel: v2
