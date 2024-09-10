@@ -35,4 +35,24 @@ template:
               description: ""
               required: false
               value: <+input>.default(false).allowedValues(true,false)
+            - name: environment
+              type: String
+              description: ""
+              required: false
+              value: <+input>
+            - name: crNumber
+              type: String
+              description: ""
+              required: false
+              value: <+input>
+            - name: crOverride
+              type: String
+              description: ""
+              required: false
+              value: <+input>
+            - name: autoapproval
+              type: String
+              description: ""
+              required: false
+              value: <+input>.default(false).allowedValues(true,false)
   versionLabel: v2
