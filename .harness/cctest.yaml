@@ -54,6 +54,15 @@ pipeline:
                       value: you
                       description: ""
                       required: false
+              - step:
+                  type: Run
+                  name: Run_2
+                  identifier: Run_2
+                  spec:
+                    connectorRef: account.AWS_Connector
+                    image: library/nginx
+                    shell: Bash
+                    command: s3 ls
         failureStrategies:
           - onFailure:
               errors:
