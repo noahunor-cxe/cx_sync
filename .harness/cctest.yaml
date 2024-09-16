@@ -118,7 +118,7 @@ pipeline:
                 type: MarkAsFailure
         when:
           pipelineStatus: Success
-          condition: <+env.type> == "Production"
+          condition: <+env.type> == "PreProduction"
   variables:
     - name: envvar
       type: String
