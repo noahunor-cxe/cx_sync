@@ -1,0 +1,13 @@
+infrastructureDefinition:
+  name: test-forever
+  identifier: testforever
+  orgIdentifier: default
+  projectIdentifier: bootcampcinoahunor
+  environmentRef: testforever
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: account.testk8s
+    namespace: default
+    releaseName: release-<+INFRA_KEY_SHORT_ID>
+  allowSimultaneousDeployments: false
