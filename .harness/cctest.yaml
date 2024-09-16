@@ -116,3 +116,14 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
+  variables:
+    - name: envvar
+      type: String
+      description: ""
+      required: false
+      value: <+env.name>
+    - name: envvar2
+      type: String
+      description: ""
+      required: false
+      value: <+env.type>
