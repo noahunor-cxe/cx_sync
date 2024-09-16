@@ -87,10 +87,10 @@ pipeline:
                       primaryArtifactRef: <+input>
                       sources: <+input>
           environmentGroup:
-            envGroupRef: tstgroup
+            envGroupRef: <+input>
             metadata:
               parallel: false
-            deployToAll: true
+            deployToAll: <+input>
             environments: <+input>
           execution:
             steps:
@@ -116,6 +116,9 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
+        when:
+          pipelineStatus: Success
+          condition: <+env.type> == "Production"
   variables:
     - name: envvar
       type: String
