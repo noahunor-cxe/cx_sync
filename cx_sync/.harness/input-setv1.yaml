@@ -1,0 +1,43 @@
+inputSet:
+  name: input-setv1
+  identifier: inputsetv1
+  orgIdentifier: default
+  projectIdentifier: bootcampcinoahunor
+  pipeline:
+    identifier: cctest
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: main
+    stages:
+      - stage:
+          identifier: demo1
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: tst
+                        sources:
+                          - identifier: tst
+                            type: ArtifactoryRegistry
+                            spec:
+                              artifactPath: delegate
+                              tag: k1
+            environmentGroup:
+              environments:
+                - environmentRef: QA
+                  deployToAll: true
+                - environmentRef: testdgenv
+                  deployToAll: true
+                - environmentRef: testforever
+                  deployToAll: false
+                  infrastructureDefinitions:
+                    - identifier: testforever
