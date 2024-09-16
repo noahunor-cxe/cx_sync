@@ -78,10 +78,10 @@ pipeline:
                       primaryArtifactRef: <+input>
                       sources: <+input>
           environmentGroup:
-            envGroupRef: <+input>
+            envGroupRef: tstgroup
             metadata:
               parallel: false
-            deployToAll: <+input>
+            deployToAll: true
             environments: <+input>
           execution:
             steps:
