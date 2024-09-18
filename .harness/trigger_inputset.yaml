@@ -1,0 +1,31 @@
+inputSet:
+  name: trigger input-set
+  identifier: trigger_inputset
+  orgIdentifier: default
+  projectIdentifier: bootcampcinoahunor
+  pipeline:
+    identifier: triggerpipeline
+    stages:
+      - stage:
+          identifier: tst
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: tst
+                        sources:
+                          - identifier: tst
+                            type: ArtifactoryRegistry
+                            spec:
+                              artifactPath: <+input>
+                              tag: <+input>
+              serviceRef: tst
+            environment:
+              environmentRef: tst
+              infrastructureDefinitions:
+                - identifier: tst
