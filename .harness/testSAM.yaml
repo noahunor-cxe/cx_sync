@@ -28,6 +28,17 @@ pipeline:
               os: Linux
           execution:
             steps:
+              - step:
+                  type: GitClone
+                  name: test_gitclone
+                  identifier: test_gitclone
+                  spec:
+                    connectorRef: testconn
+                    repoName: cx_sync
+                    build:
+                      type: branch
+                      spec:
+                        branch: main
               - stepGroup:
                   name: sam_step_group
                   identifier: tst
