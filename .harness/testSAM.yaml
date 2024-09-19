@@ -39,25 +39,15 @@ pipeline:
                       type: branch
                       spec:
                         branch: main
-              - stepGroup:
-                  name: sam_step_group
-                  identifier: tst
-                  steps:
-                    - step:
-                        type: Run
-                        name: sam_step_group
-                        identifier: Run_1
-                        spec:
-                          connectorRef: account.harnessImage
-                          image: nginx
-                          shell: Bash
-                          command: echo "hello world"
-                  variables:
-                    - name: tst
-                      type: String
-                      value: <+input>
-                      description: ""
-                      required: false
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: nginx
+                    shell: Bash
+                    command: echo "Hello World"
           caching:
             enabled: false
             paths: []
