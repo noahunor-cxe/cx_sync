@@ -47,7 +47,13 @@ pipeline:
                     connectorRef: account.harnessImage
                     image: nginx
                     shell: Bash
-                    command: echo "Hello World"
+                    command: |-
+                      mkldir test
+                      cd /test/
+                      touch something
+                      git clone https://github.com/noahunor-cxe/k8manifest.git
+                      cd k8manifest/templates
+                      echo "Hello World"
           caching:
             enabled: false
             paths: []
