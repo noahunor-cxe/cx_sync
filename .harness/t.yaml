@@ -28,7 +28,7 @@ service:
           sources:
             - spec:
                 connectorRef: test9
-                artifactPath: <+input>
+                artifactPath: harnesscx-docker/
                 tag: <+input>
                 repository: harnesscx-docker
                 repositoryFormat: docker
