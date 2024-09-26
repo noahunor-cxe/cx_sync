@@ -30,7 +30,7 @@ service:
                 connectorRef: test9
                 artifactPath: <+input>
                 tag: <+input>
-                repository: kendockerapiv2
+                repository: harnesscx-docker
                 repositoryFormat: docker
               identifier: tst
               type: ArtifactoryRegistry
