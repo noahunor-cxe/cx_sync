@@ -80,7 +80,10 @@ pipeline:
                           echo "Hello World"
                           echo $ACCESS_KEY
                     environmentVariables: []
-                    outputVariables: []
+                    outputVariables:
+                      - name: ACCESS_KEY
+                        type: String
+                        value: <+env.identifier>
                   timeout: 10m
             rollbackSteps: []
         tags: {}
