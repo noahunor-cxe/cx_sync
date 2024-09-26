@@ -49,7 +49,7 @@ pipeline:
         tags:
           Ancestry: ""
         when:
-          pipelineStatus: All
+          pipelineStatus: Failure
     - stage:
         name: test-that
         identifier: testthat
