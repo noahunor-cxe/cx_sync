@@ -29,17 +29,6 @@ pipeline:
           execution:
             steps:
               - step:
-                  type: GitClone
-                  name: test_gitclone
-                  identifier: test_gitclone
-                  spec:
-                    connectorRef: testconn
-                    repoName: cx_sync
-                    build:
-                      type: branch
-                      spec:
-                        branch: main
-              - step:
                   type: Run
                   name: Run_1
                   identifier: Run_1
@@ -48,16 +37,70 @@ pipeline:
                     image: nginx
                     shell: Bash
                     command: |-
-                      mkldir test
-                      cd /test/
-                      touch something
-                      git clone https://github.com/noahunor-cxe/k8manifest.git
-                      cd k8manifest/templates
+                      # mkldir test
+                      # cd /test/
+                      # touch something
+                      # git clone https://github.com/noahunor-cxe/k8manifest.git
+                      # cd k8manifest/templates
                       echo "Hello World"
           caching:
             enabled: false
             paths: []
         tags:
           Ancestry: ""
+        when:
+          pipelineStatus: All
+    - stage:
+        name: test-that
+        identifier: testthat
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: tst
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: tst
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tst
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: echo "Hello World"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        variables:
+          - name: ACCESS_KEY
+            type: String
+            description: ""
+            required: false
+            value: <+env.identifier>
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
   delegateSelectors:
     - helm-delegate
