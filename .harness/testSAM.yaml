@@ -58,20 +58,12 @@ pipeline:
         spec:
           deploymentType: Kubernetes
           service:
-            serviceRef: tst
-            serviceInputs:
-              serviceDefinition:
-                type: Kubernetes
-                spec:
-                  artifacts:
-                    primary:
-                      primaryArtifactRef: <+input>
-                      sources: <+input>
+            serviceRef: nginx
           environment:
-            environmentRef: tst
+            environmentRef: test
             deployToAll: false
             infrastructureDefinitions:
-              - identifier: tst
+              - identifier: test
           execution:
             steps:
               - step:
