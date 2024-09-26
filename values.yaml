@@ -15,4 +15,5 @@ env:
   config:
     key1: value10
   secrets:
-    key2: value2
+    ACCESS_KEY: '<+secrets.getValue("account.<+env.identifier>AccessKey")>'
+    
