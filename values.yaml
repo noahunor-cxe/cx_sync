@@ -15,5 +15,5 @@ env:
   config:
     key1: value10
   secrets:
-    ACCESS_KEY: '<+secrets.getValue("account.<+env.identifier>AccessKey")>'
+   ACCESS_KEY: '<+secrets.getValue("account." + substring(<+env.identifier>, 0, 4) + "AccessKey")>'
     
