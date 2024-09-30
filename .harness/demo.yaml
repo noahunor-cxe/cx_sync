@@ -24,20 +24,7 @@ pipeline:
               - serviceRef: init_instance
               - serviceRef: testschwab
             metadata:
-              parallel: false
-          environments:
-            metadata:
-              parallel: false
-            values:
-              - environmentRef: test
-                deployToAll: true
-                infrastructureDefinitions: <+input>
-              - environmentRef: testdgenv
-                deployToAll: true
-                infrastructureDefinitions: <+input>
-              - environmentRef: testforever
-                deployToAll: true
-                infrastructureDefinitions: <+input>
+              parallel: true
           execution:
             steps:
               - step:
@@ -55,6 +42,19 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
+          environments:
+            metadata:
+              parallel: true
+            values:
+              - environmentRef: test
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+              - environmentRef: testdgenv
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+              - environmentRef: testforever
+                deployToAll: true
+                infrastructureDefinitions: <+input>
         tags: {}
         when:
           pipelineStatus: Success
