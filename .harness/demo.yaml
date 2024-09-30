@@ -12,52 +12,6 @@ pipeline:
         build: <+input>
   stages:
     - stage:
-        name: demo
-        identifier: demo
-        description: ""
-        type: CI
-        spec:
-          cloneCodebase: true
-          caching:
-            enabled: false
-            paths: []
-          infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: account.testk8s
-              namespace: default
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              os: Linux
-          execution:
-            steps:
-              - step:
-                  type: Run
-                  name: Run_1
-                  identifier: Run_1
-                  spec:
-                    connectorRef: account.AWS_Connector
-                    image: 915632791698.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr-repo
-                    shell: Bash
-                    command: |-
-                      echo "Hello World"
-                      aws s3 ls
-              - step:
-                  type: Run
-                  name: Run_2
-                  identifier: Run_2
-                  spec:
-                    connectorRef: account.AWS_Connector
-                    image: 915632791698.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr-repo
-                    shell: Sh
-                    command: echo "Hello World"
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsFailure
-    - stage:
         name: final
         identifier: final
         description: ""
