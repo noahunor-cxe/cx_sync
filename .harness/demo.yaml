@@ -51,3 +51,59 @@ pipeline:
                     image: 915632791698.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr-repo
                     shell: Sh
                     command: echo "Hello World"
+    - stage:
+        name: final
+        identifier: final
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          services:
+            values:
+              - serviceRef: nginx
+              - serviceRef: init_instance
+              - serviceRef: testschwab
+            metadata:
+              parallel: false
+          environments:
+            metadata:
+              parallel: false
+            values:
+              - environmentRef: test
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+              - environmentRef: testdgenv
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+              - environmentRef: testforever
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+              - environmentRef: testolivia
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: echo "Hello World"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        when:
+          pipelineStatus: Success
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
