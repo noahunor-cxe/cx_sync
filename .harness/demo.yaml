@@ -21,8 +21,6 @@ pipeline:
           services:
             values:
               - serviceRef: nginx
-              - serviceRef: init_instance
-              - serviceRef: testschwab
             metadata:
               parallel: true
           execution:
@@ -49,15 +47,96 @@ pipeline:
               - environmentRef: test
                 deployToAll: true
                 infrastructureDefinitions: <+input>
-              - environmentRef: testdgenv
-                deployToAll: true
-                infrastructureDefinitions: <+input>
-              - environmentRef: testforever
-                deployToAll: true
-                infrastructureDefinitions: <+input>
         tags: {}
         when:
           pipelineStatus: Success
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
+    - stage:
+        name: Final1
+        identifier: Final1
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          environments:
+            metadata:
+              parallel: true
+            values:
+              - environmentRef: testdgenv
+                deployToAll: false
+                infrastructureDefinitions:
+                  - identifier: testdeng
+          services:
+            values:
+              - serviceRef: init_instance
+            metadata:
+              parallel: true
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Final1
+                  identifier: Final1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: echo "Hello World"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
+    - stage:
+        name: Final2
+        identifier: Final2
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: echo "Hello World"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+            rollbackSteps: []
+          services:
+            values:
+              - serviceRef: testschwab
+            metadata:
+              parallel: true
+          environments:
+            metadata:
+              parallel: true
+            values:
+              - environmentRef: testolivia
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+        tags: {}
         failureStrategies:
           - onFailure:
               errors:
