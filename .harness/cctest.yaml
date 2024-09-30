@@ -67,20 +67,10 @@ pipeline:
         type: Deployment
         spec:
           deploymentType: Kubernetes
-          service:
-            serviceRef: tst
-            serviceInputs:
-              serviceDefinition:
-                type: Kubernetes
-                spec:
-                  artifacts:
-                    primary:
-                      primaryArtifactRef: <+input>
-                      sources: <+input>
           environmentGroup:
             envGroupRef: tstgroup
             metadata:
-              parallel: false
+              parallel: true
             deployToAll: true
             environments: <+input>
           execution:
@@ -100,6 +90,19 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
+          services:
+            values:
+              - serviceRef: tst
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      artifacts:
+                        primary:
+                          primaryArtifactRef: <+input>
+                          sources: <+input>
+            metadata:
+              parallel: true
         tags: {}
         failureStrategies:
           - onFailure:
@@ -109,7 +112,6 @@ pipeline:
                 type: MarkAsFailure
         when:
           pipelineStatus: Success
-          condition: <+env.type> == "PreProduction"
   variables:
     - name: envvar
       type: String
