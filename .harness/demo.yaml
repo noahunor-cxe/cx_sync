@@ -78,9 +78,6 @@ pipeline:
               - environmentRef: testforever
                 deployToAll: true
                 infrastructureDefinitions: <+input>
-              - environmentRef: testolivia
-                deployToAll: true
-                infrastructureDefinitions: <+input>
           execution:
             steps:
               - step:
