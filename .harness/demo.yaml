@@ -18,11 +18,6 @@ pipeline:
         type: Deployment
         spec:
           deploymentType: Kubernetes
-          services:
-            values:
-              - serviceRef: nginx
-            metadata:
-              parallel: true
           execution:
             steps:
               - step:
@@ -47,6 +42,8 @@ pipeline:
               - environmentRef: test
                 deployToAll: true
                 infrastructureDefinitions: <+input>
+          service:
+            serviceRef: nginx
         tags: {}
         when:
           pipelineStatus: Success
@@ -71,11 +68,6 @@ pipeline:
                 deployToAll: false
                 infrastructureDefinitions:
                   - identifier: testdeng
-          services:
-            values:
-              - serviceRef: init_instance
-            metadata:
-              parallel: true
           execution:
             steps:
               - step:
@@ -93,6 +85,8 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
+          service:
+            serviceRef: init_instance
         tags: {}
         failureStrategies:
           - onFailure:
@@ -124,11 +118,6 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
-          services:
-            values:
-              - serviceRef: testschwab
-            metadata:
-              parallel: true
           environments:
             metadata:
               parallel: true
@@ -136,6 +125,8 @@ pipeline:
               - environmentRef: QA
                 deployToAll: true
                 infrastructureDefinitions: <+input>
+          service:
+            serviceRef: testschwab
         tags: {}
         failureStrategies:
           - onFailure:
