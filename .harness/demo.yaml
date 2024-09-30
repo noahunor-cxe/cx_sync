@@ -51,6 +51,12 @@ pipeline:
                     image: 915632791698.dkr.ecr.us-east-1.amazonaws.com/my-first-ecr-repo
                     shell: Sh
                     command: echo "Hello World"
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
     - stage:
         name: final
         identifier: final
