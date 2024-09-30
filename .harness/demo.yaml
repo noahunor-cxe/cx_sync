@@ -133,7 +133,7 @@ pipeline:
             metadata:
               parallel: true
             values:
-              - environmentRef: testolivia
+              - environmentRef: QA
                 deployToAll: true
                 infrastructureDefinitions: <+input>
         tags: {}
