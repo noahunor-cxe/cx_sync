@@ -92,7 +92,23 @@ pipeline:
             rollbackSteps: []
           services:
             values:
-              - serviceRef: tst
+              - serviceRef: nginx
+              - serviceRef: init_instance
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      variables:
+                        - name: helmChartBranch
+                          type: String
+                          value: <+input>.default(master)
+                        - name: sslPrivateKey
+                          type: String
+                          value: <+input>
+                        - name: sslPublicKey
+                          type: String
+                          value: <+input>
+              - serviceRef: testschwab
                 serviceInputs:
                   serviceDefinition:
                     type: Kubernetes
