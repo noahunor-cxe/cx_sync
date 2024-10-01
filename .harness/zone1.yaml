@@ -1,0 +1,45 @@
+pipeline:
+  name: zone1
+  identifier: zone1
+  projectIdentifier: noah_box
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: main
+        identifier: main
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: zone1
+          environment:
+            environmentRef: zone1
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: zone1
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: echo "Zone 1"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
