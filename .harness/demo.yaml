@@ -47,15 +47,6 @@ pipeline:
               - serviceRef: nginx
               - serviceRef: testschwab
               - serviceRef: init_instance
-              - serviceRef: tst
-                serviceInputs:
-                  serviceDefinition:
-                    type: Kubernetes
-                    spec:
-                      artifacts:
-                        primary:
-                          primaryArtifactRef: <+input>
-                          sources: <+input>
             metadata:
               parallel: false
         tags: {}
