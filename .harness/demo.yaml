@@ -4,12 +4,6 @@ pipeline:
   projectIdentifier: bootcampcinoahunor
   orgIdentifier: default
   tags: {}
-  properties:
-    ci:
-      codebase:
-        connectorRef: account.githubconnector
-        repoName: cx_sync
-        build: <+input>
   stages:
     - stage:
         name: final
@@ -37,97 +31,27 @@ pipeline:
             rollbackSteps: []
           environments:
             metadata:
-              parallel: true
+              parallel: false
             values:
               - environmentRef: test
                 deployToAll: true
                 infrastructureDefinitions: <+input>
-          service:
-            serviceRef: nginx
+              - environmentRef: testdgenv
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+              - environmentRef: testforever
+                deployToAll: true
+                infrastructureDefinitions: <+input>
+          services:
+            values:
+              - serviceRef: nginx
+              - serviceRef: testschwab
+              - serviceRef: init_instance
+            metadata:
+              parallel: false
         tags: {}
         when:
           pipelineStatus: Success
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsFailure
-    - stage:
-        name: Final1
-        identifier: Final1
-        description: ""
-        type: Deployment
-        spec:
-          deploymentType: Kubernetes
-          environments:
-            metadata:
-              parallel: true
-            values:
-              - environmentRef: testdgenv
-                deployToAll: false
-                infrastructureDefinitions:
-                  - identifier: testdeng
-          execution:
-            steps:
-              - step:
-                  type: ShellScript
-                  name: Final1
-                  identifier: Final1
-                  spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: echo "Hello World"
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
-            rollbackSteps: []
-          service:
-            serviceRef: init_instance
-        tags: {}
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsFailure
-    - stage:
-        name: Final2
-        identifier: Final2
-        description: ""
-        type: Deployment
-        spec:
-          deploymentType: Kubernetes
-          execution:
-            steps:
-              - step:
-                  type: ShellScript
-                  name: ShellScript_1
-                  identifier: ShellScript_1
-                  spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: echo "Hello World"
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
-            rollbackSteps: []
-          environments:
-            metadata:
-              parallel: true
-            values:
-              - environmentRef: QA
-                deployToAll: true
-                infrastructureDefinitions: <+input>
-          service:
-            serviceRef: testschwab
-        tags: {}
         failureStrategies:
           - onFailure:
               errors:
