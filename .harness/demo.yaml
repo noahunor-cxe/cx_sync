@@ -29,26 +29,32 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
-          environments:
-            metadata:
-              parallel: false
-            values:
-              - environmentRef: test
-                deployToAll: true
-                infrastructureDefinitions: <+input>
-              - environmentRef: testdgenv
-                deployToAll: true
-                infrastructureDefinitions: <+input>
-              - environmentRef: testforever
-                deployToAll: true
-                infrastructureDefinitions: <+input>
           services:
             values:
-              - serviceRef: nginx
+              - serviceRef: failure2
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      manifests:
+                        - manifest:
+                            identifier: mainq
+                            type: Kustomize
+                            spec:
+                              store:
+                                type: HarnessCode
+                                spec:
+                                  repoName: <+input>
               - serviceRef: testschwab
-              - serviceRef: init_instance
+              - serviceRef: nginx
             metadata:
               parallel: false
+          environment:
+            environmentRef: <+input>
+            deployToAll: false
+            environmentInputs: <+input>
+            serviceOverrideInputs: <+input>
+            infrastructureDefinitions: <+input>
         tags: {}
         when:
           pipelineStatus: Success
