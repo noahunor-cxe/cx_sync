@@ -55,11 +55,10 @@ pipeline:
             metadata:
               parallel: false
           environment:
-            environmentRef: <+input>
+            environmentRef: testforever
             deployToAll: false
-            environmentInputs: <+input>
-            serviceOverrideInputs: <+input>
-            infrastructureDefinitions: <+input>
+            infrastructureDefinitions:
+              - identifier: testforever
         tags: {}
         when:
           pipelineStatus: Success
