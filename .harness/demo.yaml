@@ -24,9 +24,14 @@ pipeline:
                     source:
                       type: Inline
                       spec:
-                        script: echo "Hello World"
+                        script: |-
+                          echo "Hello World"
+                          echo test
                     environmentVariables: []
-                    outputVariables: []
+                    outputVariables:
+                      - name: test
+                        type: String
+                        value: Ali
                   timeout: 10m
             rollbackSteps: []
           services:
