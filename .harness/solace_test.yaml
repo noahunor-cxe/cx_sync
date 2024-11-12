@@ -1,0 +1,28 @@
+inputSet:
+  name: solace_test
+  identifier: solace_test
+  orgIdentifier: default
+  projectIdentifier: bootcampcinoahunor
+  pipeline:
+    identifier: demo
+    stages:
+      - stage:
+          identifier: final
+          type: Deployment
+          spec:
+            services:
+              values:
+                - serviceInputs:
+                    serviceDefinition:
+                      type: Kubernetes
+                      spec:
+                        manifests:
+                          - manifest:
+                              identifier: mainq
+                              type: Kustomize
+                              spec:
+                                store:
+                                  type: HarnessCode
+                                  spec:
+                                    repoName: main
+                  serviceRef: failure2
