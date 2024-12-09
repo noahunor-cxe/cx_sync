@@ -34,18 +34,16 @@ pipeline:
                         value: Ali
                   timeout: 10m
               - step:
-                  type: ShellScript
-                  name: ShellScript_2
-                  identifier: ShellScript_2
+                  type: K8sApply
+                  name: K8sApply_1
+                  identifier: K8sApply_1
                   spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: echo "you"
-                    environmentVariables: []
-                    outputVariables: []
+                    skipDryRun: false
+                    skipSteadyStateCheck: false
+                    skipRendering: false
+                    overrides: []
+                    filePaths:
+                      - "677"
                   timeout: 10m
             rollbackSteps: []
           services:
