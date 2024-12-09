@@ -80,3 +80,39 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
+    - stage:
+        name: look
+        identifier: look
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: init_instance
+          environment:
+            environmentRef: test
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: test
+          execution:
+            steps:
+              - step:
+                  type: K8sApply
+                  name: K8sApply_1
+                  identifier: K8sApply_1
+                  spec:
+                    skipDryRun: false
+                    skipSteadyStateCheck: false
+                    skipRendering: false
+                    overrides: []
+                    filePaths:
+                      - ieiw
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
