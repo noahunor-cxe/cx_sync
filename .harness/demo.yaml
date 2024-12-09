@@ -33,18 +33,6 @@ pipeline:
                         type: String
                         value: Ali
                   timeout: 10m
-              - step:
-                  type: K8sApply
-                  name: K8sApply_1
-                  identifier: K8sApply_1
-                  spec:
-                    skipDryRun: false
-                    skipSteadyStateCheck: false
-                    skipRendering: false
-                    overrides: []
-                    filePaths:
-                      - "677"
-                  timeout: 10m
             rollbackSteps: []
           services:
             values:
