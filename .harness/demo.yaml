@@ -6,12 +6,16 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: final
-        identifier: final
+        name: testing
+        identifier: testing
         description: ""
-        type: Deployment
+        type: Custom
         spec:
-          deploymentType: Kubernetes
+          environment:
+            environmentRef: testforever
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: testforever
           execution:
             steps:
               - step:
@@ -25,82 +29,19 @@ pipeline:
                       type: Inline
                       spec:
                         script: |-
-                          echo "Hello World"
-                          echo var test
+                          #!/bin/bash
+
+                          set -e
+
+                          env_type=<+env.type>
+
+                          echo "pipeline exec mode: <+pipeline.executionMode>"
+
+                          echo "trigger identifier: <+pipeline.triggeredBy.triggerIdentifier>"
+                          echo "trigger type:<+trigger.type>"
+                          echo "trigger event: <+trigger.event>"
+                          echo "payload: <+trigger.payload>"
                     environmentVariables: []
-                    outputVariables:
-                      - name: test
-                        type: String
-                        value: Ali
+                    outputVariables: []
                   timeout: 10m
-            rollbackSteps: []
-          services:
-            values:
-              - serviceRef: failure2
-                serviceInputs:
-                  serviceDefinition:
-                    type: Kubernetes
-                    spec:
-                      manifests:
-                        - manifest:
-                            identifier: mainq
-                            type: Kustomize
-                            spec:
-                              store:
-                                type: HarnessCode
-                                spec:
-                                  repoName: <+input>
-              - serviceRef: testschwab
-              - serviceRef: nginx
-            metadata:
-              parallel: false
-          environment:
-            environmentRef: testforever
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: testforever
         tags: {}
-        when:
-          pipelineStatus: Success
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsFailure
-    - stage:
-        name: look
-        identifier: look
-        description: ""
-        type: Deployment
-        spec:
-          deploymentType: Kubernetes
-          service:
-            serviceRef: init_instance
-          environment:
-            environmentRef: test
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: test
-          execution:
-            steps:
-              - step:
-                  type: K8sApply
-                  name: K8sApply_1
-                  identifier: K8sApply_1
-                  spec:
-                    skipDryRun: false
-                    skipSteadyStateCheck: false
-                    skipRendering: false
-                    overrides: []
-                    filePaths:
-                      - ieiw
-                  timeout: 10m
-            rollbackSteps: []
-        tags: {}
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsFailure
