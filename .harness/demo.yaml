@@ -40,3 +40,39 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
         tags: {}
+    - stage:
+        name: fast
+        identifier: fast
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: nginx
+          environment:
+            environmentRef: test
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: test
+          execution:
+            steps:
+              - step:
+                  type: K8sApply
+                  name: K8sApply_1
+                  identifier: K8sApply_1
+                  spec:
+                    skipDryRun: false
+                    skipSteadyStateCheck: false
+                    skipRendering: false
+                    overrides: []
+                    filePaths:
+                      - ewrt
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
