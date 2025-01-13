@@ -45,12 +45,6 @@ pipeline:
                   identifier: FilesUpload_1
                   spec: {}
                   timeout: 30m
-              - step:
-                  type: FilesUpload
-                  name: FilesUpload_2
-                  identifier: FilesUpload_2
-                  spec: {}
-                  timeout: 30m
         tags: {}
     - stage:
         name: test
@@ -64,10 +58,5 @@ pipeline:
                   type: FilesUpload
                   name: FilesUpload_1
                   identifier: FilesUpload_1
-                  spec: {}
-              - step:
-                  type: FilesUpload
-                  name: FilesUpload_2
-                  identifier: FilesUpload_2
                   spec: {}
         tags: {}
