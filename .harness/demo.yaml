@@ -11,11 +11,6 @@ pipeline:
         description: ""
         type: Custom
         spec:
-          environment:
-            environmentRef: testforever
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: testforever
           execution:
             steps:
               - step:
@@ -45,6 +40,11 @@ pipeline:
                   identifier: FilesUpload_1
                   spec: {}
                   timeout: 30m
+          environment:
+            environmentRef: <+pipeline.variables.cloud>environment
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: <+pipeline.variables.cloud>_NativeHelm_boomi_Infrastructure
         tags: {}
     - stage:
         name: test
