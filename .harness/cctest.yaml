@@ -128,6 +128,7 @@ pipeline:
                 type: MarkAsFailure
         when:
           pipelineStatus: Success
+        delegateSelectors: <+input>
   variables:
     - name: envvar
       type: String
