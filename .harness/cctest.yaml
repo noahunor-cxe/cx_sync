@@ -61,10 +61,7 @@ pipeline:
                               action:
                                 type: Abort
                         strategy:
-                          repeat:
-                            items: <+stage.output.hosts>
-                            maxConcurrency: <+stage.variables.maxDeploymentConcurrency>
-                            nodeName: <+repeat.item>
+                          parallelism: 1
                   variables:
                     - name: name
                       type: String
