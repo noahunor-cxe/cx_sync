@@ -44,9 +44,9 @@ pipeline:
                           image: nginx
                           shell: Bash
                           command: |-
-                            mkdir son
-                            cd son
-                            touch son11
+                            mkdir son1
+                            cd son1
+                            touch son111
                             echo "hello World"
 
                             sleep 30
