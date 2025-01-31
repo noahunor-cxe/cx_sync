@@ -48,6 +48,9 @@ pipeline:
                             cd son
                             touch son11
                             echo "hello World"
+
+                            sleep 30
+
                             cd sam
                           outputVariables:
                             - name: yours
