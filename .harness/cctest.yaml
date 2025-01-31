@@ -50,8 +50,6 @@ pipeline:
                             echo "hello World"
 
                             sleep 30
-
-                            cd sam
                           outputVariables:
                             - name: yours
                               type: Secret
