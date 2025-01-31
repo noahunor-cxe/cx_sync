@@ -46,10 +46,9 @@ pipeline:
                           command: |-
                             mkdir son
                             cd son
-                            cat son
-                            cd dynamic
-                            cat dynamic
+                            touch son11
                             echo "hello World"
+                            cd sam
                           outputVariables:
                             - name: yours
                               type: Secret
