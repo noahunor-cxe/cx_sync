@@ -63,7 +63,7 @@ pipeline:
                               action:
                                 type: Abort
                         strategy:
-                          parallelism: 1
+                          parallelism: 5
                   variables:
                     - name: name
                       type: String
