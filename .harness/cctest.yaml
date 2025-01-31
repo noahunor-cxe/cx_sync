@@ -88,8 +88,11 @@ pipeline:
             envGroupRef: tstgroup
             metadata:
               parallel: true
-            deployToAll: true
-            environments: <+input>
+            deployToAll: false
+            environments:
+              - environmentRef: testforever
+                deployToAll: true
+                infrastructureDefinitions: <+input>
           execution:
             steps:
               - step:
@@ -107,35 +110,8 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
-          services:
-            values:
-              - serviceRef: nginx
-              - serviceRef: init_instance
-                serviceInputs:
-                  serviceDefinition:
-                    type: Kubernetes
-                    spec:
-                      variables:
-                        - name: helmChartBranch
-                          type: String
-                          value: <+input>.default(master)
-                        - name: sslPrivateKey
-                          type: String
-                          value: <+input>
-                        - name: sslPublicKey
-                          type: String
-                          value: <+input>
-              - serviceRef: testschwab
-                serviceInputs:
-                  serviceDefinition:
-                    type: Kubernetes
-                    spec:
-                      artifacts:
-                        primary:
-                          primaryArtifactRef: <+input>
-                          sources: <+input>
-            metadata:
-              parallel: true
+          service:
+            serviceRef: nginx
         tags: {}
         failureStrategies:
           - onFailure:
