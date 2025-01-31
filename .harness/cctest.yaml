@@ -43,11 +43,28 @@ pipeline:
                           connectorRef: account.harnessImage
                           image: nginx
                           shell: Bash
-                          command: echo "hello World"
+                          command: |-
+                            mkdir son
+                            cd son
+                            cat son
+                            cd dynamic
+                            cat dynamic
+                            echo "hello World"
                           outputVariables:
                             - name: yours
                               type: Secret
                               value: hhhhh
+                        failureStrategies:
+                          - onFailure:
+                              errors:
+                                - AllErrors
+                              action:
+                                type: Abort
+                        strategy:
+                          repeat:
+                            items: <+stage.output.hosts>
+                            maxConcurrency: <+stage.variables.maxDeploymentConcurrency>
+                            nodeName: <+repeat.item>
                   variables:
                     - name: name
                       type: String
