@@ -78,15 +78,6 @@ pipeline:
         type: Deployment
         spec:
           deploymentType: Kubernetes
-          environmentGroup:
-            envGroupRef: tstgroup
-            metadata:
-              parallel: true
-            deployToAll: false
-            environments:
-              - environmentRef: testforever
-                deployToAll: true
-                infrastructureDefinitions: <+input>
           execution:
             steps:
               - step:
@@ -106,6 +97,12 @@ pipeline:
             rollbackSteps: []
           service:
             serviceRef: nginx
+          environment:
+            environmentRef: <+input>
+            deployToAll: false
+            environmentInputs: <+input>
+            serviceOverrideInputs: <+input>
+            infrastructureDefinitions: <+input>
         tags: {}
         failureStrategies:
           - onFailure:
