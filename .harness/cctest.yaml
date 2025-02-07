@@ -102,7 +102,7 @@ pipeline:
             deployToAll: false
             environmentInputs: <+input>
             serviceOverrideInputs: <+input>
-            infrastructureDefinitions: <+input>
+            infrastructureDefinitions: <+input>.required()
         tags: {}
         failureStrategies:
           - onFailure:
