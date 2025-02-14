@@ -35,26 +35,31 @@ pipeline:
                     environmentVariables: []
                     outputVariables: []
                   timeout: 10m
-              - step:
-                  type: FilesUpload
-                  name: FilesUpload_1
-                  identifier: FilesUpload_1
-                  spec: {}
-                  timeout: 15s
-              - step:
-                  type: ShellScript
-                  name: ShellScript_2
-                  identifier: ShellScript_2
-                  spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: echo "Hello World"
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
+              - stepGroup:
+                  name: test
+                  identifier: test
+                  steps:
+                    - parallel:
+                        - step:
+                            type: ShellScript
+                            name: ShellScript_2
+                            identifier: ShellScript_2
+                            spec:
+                              shell: Bash
+                              executionTarget: {}
+                              source:
+                                type: Inline
+                                spec:
+                                  script: echo "Hello World"
+                              environmentVariables: []
+                              outputVariables: []
+                            timeout: 10m
+                        - step:
+                            type: FilesUpload
+                            name: FilesUpload_1
+                            identifier: FilesUpload_1
+                            spec: {}
+                            timeout: 15s
             rollbackSteps: []
           service:
             serviceRef: nginx
