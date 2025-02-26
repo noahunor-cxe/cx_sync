@@ -116,7 +116,9 @@ pipeline:
                       disallowPipelineExecutor: false
                     approverInputs:
                       - name: test
-                        defaultValue: v234
+                        defaultValue: ""
+                      - name: try
+                        defaultValue: ""
                   timeout: 1d
             rollbackSteps: []
         tags: {}
