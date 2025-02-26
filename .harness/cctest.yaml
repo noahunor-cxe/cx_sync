@@ -114,7 +114,9 @@ pipeline:
                         - account._account_all_users
                       minimumCount: 1
                       disallowPipelineExecutor: false
-                    approverInputs: []
+                    approverInputs:
+                      - name: test
+                        defaultValue: v234
                   timeout: 1d
             rollbackSteps: []
         tags: {}
