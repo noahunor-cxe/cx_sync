@@ -111,7 +111,7 @@ pipeline:
                     isAutoRejectEnabled: false
                     approvers:
                       userGroups:
-                        - account._account_all_users
+                        - test
                       minimumCount: 1
                       disallowPipelineExecutor: false
                     approverInputs:
