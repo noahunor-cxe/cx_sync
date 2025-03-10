@@ -81,10 +81,11 @@ pipeline:
           service:
             serviceRef: nginx
           environment:
-            environmentRef: test
+            environmentRef: <+input>
             deployToAll: false
-            infrastructureDefinitions:
-              - identifier: test
+            environmentInputs: <+input>
+            serviceOverrideInputs: <+input>
+            infrastructureDefinitions: <+input>
           execution:
             steps:
               - step:
