@@ -121,7 +121,8 @@ pipeline:
         tags: {}
         failureStrategies:
           - onFailure:
-              errors: []
+              errors:
+                - AllErrors
               action:
                 type: MarkAsSuccess
   variables:
