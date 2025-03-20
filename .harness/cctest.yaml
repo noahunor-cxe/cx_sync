@@ -104,31 +104,26 @@ pipeline:
                   timeout: 10m
               - step:
                   type: HarnessApproval
-                  name: HarnessApproval_1
-                  identifier: HarnessApproval_1
+                  name: test
+                  identifier: test
                   spec:
                     approvalMessage: Please review the following information and approve the pipeline progression
                     includePipelineExecutionHistory: true
                     isAutoRejectEnabled: false
                     approvers:
                       userGroups:
-                        - test
+                        - account._account_all_users
                       minimumCount: 1
                       disallowPipelineExecutor: false
-                    approverInputs:
-                      - name: test
-                        defaultValue: ""
-                      - name: try
-                        defaultValue: ""
+                    approverInputs: []
                   timeout: 1d
             rollbackSteps: []
         tags: {}
         failureStrategies:
           - onFailure:
-              errors:
-                - AllErrors
+              errors: []
               action:
-                type: MarkAsFailure
+                type: MarkAsSuccess
   variables:
     - name: envvar
       type: String
