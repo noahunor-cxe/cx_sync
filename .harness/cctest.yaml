@@ -59,6 +59,7 @@ pipeline:
                                 type: Abort
                         strategy:
                           parallelism: 5
+                        timeout: 10s
                   variables:
                     - name: name
                       type: String
@@ -136,3 +137,17 @@ pipeline:
       description: ""
       required: false
       value: <+env.type>
+  notificationRules:
+    - name: test
+      identifier: test
+      pipelineEvents:
+        - type: StageFailed
+          forStages:
+            - ccrunstep
+      notificationMethod:
+        type: Email
+        spec:
+          userGroups: []
+          recipients:
+            - noah.unor@harness.io
+      enabled: true
