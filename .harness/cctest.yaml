@@ -59,7 +59,6 @@ pipeline:
                                 type: Abort
                         strategy:
                           parallelism: 5
-                        timeout: 10s
                   variables:
                     - name: name
                       type: String
