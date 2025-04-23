@@ -65,6 +65,19 @@ pipeline:
                       value: you
                       description: ""
                       required: false
+              - step:
+                  type: Gitleaks
+                  name: Gitleaks_1
+                  identifier: Gitleaks_1
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: repository
+                      detection: auto
+                    advanced:
+                      log:
+                        level: debug
         failureStrategies:
           - onFailure:
               errors:
