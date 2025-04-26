@@ -158,3 +158,5 @@ pipeline:
           recipients:
             - noah.unor@harness.io
       enabled: true
+  delegateSelectors:
+    - noah-delegate
