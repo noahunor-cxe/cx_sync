@@ -31,53 +31,15 @@ pipeline:
               os: Linux
           execution:
             steps:
-              - stepGroup:
-                  name: tst
-                  identifier: tst
-                  steps:
-                    - step:
-                        type: Run
-                        name: Run_1
-                        identifier: Run_1
-                        spec:
-                          connectorRef: account.harnessImage
-                          image: nginx
-                          shell: Bash
-                          command: |-
-                            echo "hello World"
-
-                            sleep 30
-                          outputVariables:
-                            - name: yours
-                              type: Secret
-                              value: hhhhh
-                        failureStrategies:
-                          - onFailure:
-                              errors:
-                                - AllErrors
-                              action:
-                                type: Abort
-                        strategy:
-                          parallelism: 5
-                  variables:
-                    - name: name
-                      type: String
-                      value: you
-                      description: ""
-                      required: false
               - step:
-                  type: Gitleaks
-                  name: Gitleaks_1
-                  identifier: Gitleaks_1
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
                   spec:
-                    mode: orchestration
-                    config: default
-                    target:
-                      type: repository
-                      detection: auto
-                    advanced:
-                      log:
-                        level: debug
+                    connectorRef: account.harnessImage
+                    image: library/nginx
+                    shell: Sh
+                    command: echo "Hello"
         failureStrategies:
           - onFailure:
               errors:
@@ -111,7 +73,40 @@ pipeline:
                     source:
                       type: Inline
                       spec:
-                        script: echo "Hello World"
+                        script: |
+                          echo "Hello World"
+                          #!/bin/bash
+
+                          # Set KUBECONFIG to Harness kubeconfig path
+                          export KUBECONFIG=${HARNESS_KUBE_CONFIG_PATH}
+
+                          # Try to get the ConfigMap
+                          echo "Checking for existing ConfigMap krb5-config in namespace default..."
+
+                          kubectl get configmap krb5-config -n default
+
+                          if [ $? -eq 0 ]; then
+                            echo "ConfigMap exists!"
+                            echo "export CONFIGMAP_EXISTS=true" >> harnessenv
+                          else
+                            echo "ConfigMap does not exist."
+                            echo "export CONFIGMAP_EXISTS=false" >> harnessenv
+                          fi
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+              - step:
+                  type: ShellScript
+                  name: ShellScript_2
+                  identifier: ShellScript_2
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          echo "Was the ConfigMap found? ${CONFIGMAP_EXISTS}"
                     environmentVariables: []
                     outputVariables: []
                   timeout: 10m
