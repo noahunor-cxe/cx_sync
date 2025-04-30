@@ -21,14 +21,6 @@ pipeline:
           cloneCodebase: true
           caching:
             enabled: true
-          infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: account.testk8s
-              namespace: default
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              os: Linux
           execution:
             steps:
               - step:
@@ -149,6 +141,12 @@ pipeline:
 
                       TMS_WORKDIR="${WORKDIR}/TMS_Venta_Login"
                       Dependencies_dir="${TMS_WORKDIR}/lib"
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
         failureStrategies:
           - onFailure:
               errors:
