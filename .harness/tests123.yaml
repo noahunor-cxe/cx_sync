@@ -8,11 +8,19 @@ template:
   spec:
     stages:
       - stage:
-          name: tst
-          identifier: tst
+          name: one
+          identifier: one
           description: ""
-          type: FeatureFlag
+          type: Deployment
           spec:
+            deploymentType: Kubernetes
+            environment:
+              environmentRef: test
+              deployToAll: false
+              infrastructureDefinitions:
+                - identifier: test
+            service:
+              serviceRef: nginx
             execution:
               steps:
                 - step:
@@ -25,34 +33,90 @@ template:
                       source:
                         type: Inline
                         spec:
-                          script: echo "Hello World"
+                          script: echo "one"
                       environmentVariables: []
                       outputVariables: []
                     timeout: 10m
-          variables:
-            - name: flagID
-              type: String
-              description: ""
-              required: false
-              value: <+input>.default(false).allowedValues(true,false)
-            - name: environment
-              type: String
-              description: ""
-              required: false
-              value: <+input>
-            - name: crNumber
-              type: String
-              description: ""
-              required: false
-              value: <+input>
-            - name: crOverride
-              type: String
-              description: ""
-              required: false
-              value: <+input>
-            - name: autoapproval
-              type: String
-              description: ""
-              required: false
-              value: <+input>.default(Dinesh.Arora@wellsfargo.com)
+              rollbackSteps: []
+          tags: {}
+          failureStrategies:
+            - onFailure:
+                errors:
+                  - AllErrors
+                action:
+                  type: MarkAsFailure
+      - stage:
+          name: two
+          identifier: two
+          description: ""
+          type: Deployment
+          spec:
+            deploymentType: Kubernetes
+            environment:
+              useFromStage:
+                stage: one
+            service:
+              useFromStage:
+                stage: one
+            execution:
+              steps:
+                - step:
+                    type: ShellScript
+                    name: ShellScript_1
+                    identifier: ShellScript_1
+                    spec:
+                      shell: Bash
+                      executionTarget: {}
+                      source:
+                        type: Inline
+                        spec:
+                          script: echo "two"
+                      environmentVariables: []
+                      outputVariables: []
+                    timeout: 10m
+              rollbackSteps: []
+          tags: {}
+          failureStrategies:
+            - onFailure:
+                errors:
+                  - AllErrors
+                action:
+                  type: MarkAsFailure
+      - stage:
+          name: three
+          identifier: three
+          description: ""
+          type: Deployment
+          spec:
+            deploymentType: Kubernetes
+            environment:
+              useFromStage:
+                stage: one
+            service:
+              useFromStage:
+                stage: one
+            execution:
+              steps:
+                - step:
+                    type: ShellScript
+                    name: ShellScript_1
+                    identifier: ShellScript_1
+                    spec:
+                      shell: Bash
+                      executionTarget: {}
+                      source:
+                        type: Inline
+                        spec:
+                          script: echo "three"
+                      environmentVariables: []
+                      outputVariables: []
+                    timeout: 10m
+              rollbackSteps: []
+          tags: {}
+          failureStrategies:
+            - onFailure:
+                errors:
+                  - AllErrors
+                action:
+                  type: MarkAsFailure
   versionLabel: v4
