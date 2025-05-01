@@ -46,43 +46,6 @@ template:
                 action:
                   type: MarkAsFailure
       - stage:
-          name: two
-          identifier: two
-          description: ""
-          type: Deployment
-          spec:
-            deploymentType: Kubernetes
-            environment:
-              useFromStage:
-                stage: one
-            service:
-              useFromStage:
-                stage: one
-            execution:
-              steps:
-                - step:
-                    type: ShellScript
-                    name: ShellScript_1
-                    identifier: ShellScript_1
-                    spec:
-                      shell: Bash
-                      executionTarget: {}
-                      source:
-                        type: Inline
-                        spec:
-                          script: echo "two"
-                      environmentVariables: []
-                      outputVariables: []
-                    timeout: 10m
-              rollbackSteps: []
-          tags: {}
-          failureStrategies:
-            - onFailure:
-                errors:
-                  - AllErrors
-                action:
-                  type: MarkAsFailure
-      - stage:
           name: three
           identifier: three
           description: ""
