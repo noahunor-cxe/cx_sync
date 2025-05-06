@@ -146,6 +146,7 @@ pipeline:
             spec:
               connectorRef: prod
               namespace: default
+              serviceAccountName: test
               automountServiceAccountToken: true
               nodeSelector: {}
               os: Linux
