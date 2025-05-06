@@ -141,12 +141,14 @@ pipeline:
 
                       TMS_WORKDIR="${WORKDIR}/TMS_Venta_Login"
                       Dependencies_dir="${TMS_WORKDIR}/lib"
-          platform:
-            os: Linux
-            arch: Amd64
-          runtime:
-            type: Docker
-            spec: {}
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: prod
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
         failureStrategies:
           - onFailure:
               errors:
