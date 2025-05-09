@@ -150,7 +150,7 @@ pipeline:
                     repo: noah1854/test
                     tags:
                       - <+execution.steps.Versioning.output.outputVariables.tag>
-                    caching: true
+                    caching: false
                     envVariables:
                       PLUGIN_DRY_RUN: "true"
           infrastructure:
