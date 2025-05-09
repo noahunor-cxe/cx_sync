@@ -158,7 +158,7 @@ pipeline:
             spec:
               connectorRef: account.testk8s
               namespace: default
-              serviceAccountName: test
+              serviceAccountName: ""
               automountServiceAccountToken: true
               nodeSelector: {}
               os: Linux
