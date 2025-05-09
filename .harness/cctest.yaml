@@ -141,6 +141,18 @@ pipeline:
 
                       TMS_WORKDIR="${WORKDIR}/TMS_Venta_Login"
                       Dependencies_dir="${TMS_WORKDIR}/lib"
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    repo: noah1854/test
+                    tags:
+                      - <+execution.steps.Versioning.output.outputVariables.tag>
+                    caching: true
+                    envVariables:
+                      PLUGIN_DRY_RUN: "true"
           infrastructure:
             type: KubernetesDirect
             spec:
