@@ -156,7 +156,7 @@ pipeline:
           infrastructure:
             type: KubernetesDirect
             spec:
-              connectorRef: prod
+              connectorRef: account.testk8s
               namespace: noahns
               serviceAccountName: test
               automountServiceAccountToken: true
