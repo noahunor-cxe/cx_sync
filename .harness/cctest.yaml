@@ -168,6 +168,8 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
+        delegateSelectors:
+          - noah-delegate
     - stage:
         name: test
         identifier: test
