@@ -153,6 +153,23 @@ pipeline:
                     caching: false
                     envVariables:
                       PLUGIN_DRY_RUN: "true"
+              - step:
+                  type: SscaArtifactSigning
+                  name: Artifact Signing_1
+                  identifier: ArtifactSigning_1
+                  spec:
+                    source:
+                      type: docker
+                      spec:
+                        connector: account.harnessImage
+                        image: nginx
+                    signing:
+                      type: cosign
+                      spec:
+                        private_key: test2
+                        password: account.docker-connector
+                    uploadSignature:
+                      upload: true
           infrastructure:
             type: KubernetesDirect
             spec:
