@@ -149,10 +149,13 @@ pipeline:
                     connectorRef: account.harnessImage
                     repo: noah1854/test
                     tags:
-                      - <+execution.steps.Versioning.output.outputVariables.tag>
+                      - <+pipeline.stages.build.spec.execution.steps.custom_variables.output.outputVariables.docker_image_ver_out>
                     caching: false
                     envVariables:
                       PLUGIN_DRY_RUN: "true"
+                      PLUGIN_BUILDX_LOAD: "false"
+                      PLUGIN_DAEMON_OFF: "true"
+                      PLUGIN_DOCKER_HOST: unix:///run/user/1000/docker.sock
               - step:
                   type: SscaArtifactSigning
                   name: Artifact Signing_1
@@ -187,93 +190,6 @@ pipeline:
                 type: MarkAsFailure
         delegateSelectors:
           - noah-delegate
-    - stage:
-        name: test
-        identifier: test
-        description: ""
-        type: Deployment
-        spec:
-          deploymentType: Kubernetes
-          service:
-            serviceRef: nginx
-          environment:
-            environmentRef: <+input>
-            deployToAll: false
-            environmentInputs: <+input>
-            serviceOverrideInputs: <+input>
-            infrastructureDefinitions: <+input>
-          execution:
-            steps:
-              - step:
-                  type: ShellScript
-                  name: ShellScript_1
-                  identifier: ShellScript_1
-                  spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: |
-                          echo "Hello World"
-                          #!/bin/bash
-
-                          # Set KUBECONFIG to Harness kubeconfig path
-                          export KUBECONFIG=${HARNESS_KUBE_CONFIG_PATH}
-
-                          # Try to get the ConfigMap
-                          echo "Checking for existing ConfigMap krb5-config in namespace default..."
-
-                          kubectl get configmap krb5-config -n default
-
-                          if [ $? -eq 0 ]; then
-                            echo "ConfigMap exists!"
-                            echo "export CONFIGMAP_EXISTS=true" >> harnessenv
-                          else
-                            echo "ConfigMap does not exist."
-                            echo "export CONFIGMAP_EXISTS=false" >> harnessenv
-                          fi
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
-              - step:
-                  type: ShellScript
-                  name: ShellScript_2
-                  identifier: ShellScript_2
-                  spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: |
-                          echo "Was the ConfigMap found? ${CONFIGMAP_EXISTS}"
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
-              - step:
-                  type: HarnessApproval
-                  name: test
-                  identifier: test
-                  spec:
-                    approvalMessage: Please review the following information and approve the pipeline progression
-                    includePipelineExecutionHistory: true
-                    isAutoRejectEnabled: false
-                    approvers:
-                      userGroups:
-                        - account._account_all_users
-                      minimumCount: 1
-                      disallowPipelineExecutor: false
-                    approverInputs: []
-                  timeout: 1d
-            rollbackSteps: []
-        tags: {}
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsSuccess
   variables:
     - name: envvar
       type: String
