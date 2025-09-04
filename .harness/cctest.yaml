@@ -33,6 +33,10 @@ pipeline:
                     tags:
                       - <+pipeline.stages.build.spec.execution.steps.custom_variables.output.outputVariables.docker_image_ver_out>
                     caching: false
+                    additionalArgs:
+                      - "--snapshot-mode=redo"
+                      - "--tarPath=/harness/image.tar"
+                      - "--destination=<+execution.steps.custom_variables.output.outputVariables.docker_image_name_out>:<+pipeline.stages.build.spec.execution.steps.custom_variables.output.outputVariables.docker_image_ver_out>"
                     envVariables:
                       PLUGIN_DRY_RUN: "true"
                       PLUGIN_BUILDX_LOAD: "false"
