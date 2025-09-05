@@ -27,16 +27,30 @@ pipeline:
               os: Linux
           execution:
             steps:
-              - step:
-                  type: BuildAndPushDockerRegistry
-                  name: BuildAndPushDockerRegistry_1
-                  identifier: BuildAndPushDockerRegistry_1
-                  spec:
-                    connectorRef: account.harnessImage
-                    repo: " noah1854/test"
-                    tags:
-                      - test
-                    caching: false
+              - stepGroup:
+                  name: docker
+                  identifier: docker
+                  steps:
+                    - step:
+                        type: BuildAndPushDockerRegistry
+                        name: BuildAndPushDockerRegistry_1
+                        identifier: BuildAndPushDockerRegistry_1
+                        spec:
+                          connectorRef: account.harnessImage
+                          repo: " noah1854/test"
+                          tags:
+                            - <+pipeline.sequenceId>
+                          caching: false
+                    - step:
+                        type: BuildAndPushDockerRegistry
+                        name: no push
+                        identifier: no_push
+                        spec:
+                          connectorRef: account.harnessImage
+                          repo: noah1854/test
+                          tags:
+                            - <+pipeline.sequenceId>
+                          caching: false
         delegateSelectors:
           - noah-delegate
     - stage:
