@@ -9,43 +9,34 @@ pipeline:
         name: testing
         identifier: testing
         description: ""
-        type: Custom
+        type: CI
         spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.testk8s
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
           execution:
             steps:
               - step:
-                  type: ShellScript
-                  name: ShellScript_1
-                  identifier: ShellScript_1
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
                   spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: |-
-                          #!/bin/bash
-
-                          set -e
-
-                          env_type=<+env.type>
-
-                          echo "pipeline.triggerType:  <+pipeline.triggerType>"
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
-              - step:
-                  type: FilesUpload
-                  name: FilesUpload_1
-                  identifier: FilesUpload_1
-                  spec: {}
-                  timeout: 30m
-          environment:
-            environmentRef: <+pipeline.variables.cloud>environment
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: <+pipeline.variables.cloud>_NativeHelm_boomi_Infrastructure
-        tags: {}
+                    connectorRef: account.harnessImage
+                    repo: " noah1854/test"
+                    tags:
+                      - test
+                    caching: false
     - stage:
         name: test
         identifier: test
@@ -60,3 +51,9 @@ pipeline:
                   identifier: FilesUpload_1
                   spec: {}
         tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: testconn
+        repoName: cx_sync
+        build: <+input>
