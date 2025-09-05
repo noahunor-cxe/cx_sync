@@ -37,6 +37,8 @@ pipeline:
                     tags:
                       - test
                     caching: false
+        delegateSelectors:
+          - noah-delegate
     - stage:
         name: test
         identifier: test
