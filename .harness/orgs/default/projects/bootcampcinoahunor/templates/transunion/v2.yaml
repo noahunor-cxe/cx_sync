@@ -1,0 +1,128 @@
+template:
+  name: transunion
+  identifier: transunion
+  type: Pipeline
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    properties:
+      ci:
+        codebase:
+          repoName: test
+          build: <+input>
+    stages:
+      - stage:
+          name: SAST
+          identifier: SAST
+          description: ""
+          type: CI
+          spec:
+            cloneCodebase: true
+            caching:
+              enabled: true
+              override: false
+            buildIntelligence:
+              enabled: true
+            infrastructure:
+              type: KubernetesDirect
+              spec:
+                connectorRef: account.testk8s
+                namespace: default
+                automountServiceAccountToken: true
+                nodeSelector: {}
+                os: Linux
+            execution:
+              steps:
+                - step:
+                    type: Gitleaks
+                    name: Gitleaks_1
+                    identifier: Gitleaks_1
+                    spec:
+                      mode: orchestration
+                      config: default
+                      target:
+                        type: repository
+                        detection: auto
+                      advanced:
+                        log:
+                          level: info
+      - stage:
+          name: Dotnet
+          identifier: Dotnet
+          description: ""
+          type: CI
+          spec:
+            cloneCodebase: true
+            caching:
+              enabled: true
+              override: false
+            buildIntelligence:
+              enabled: true
+            infrastructure:
+              type: KubernetesDirect
+              spec:
+                connectorRef: account.testk8s
+                namespace: default
+                nodeSelector: {}
+                os: Linux
+            execution:
+              steps:
+                - step:
+                    type: Run
+                    name: Run_1
+                    identifier: Run_1
+                    spec:
+                      connectorRef: account.harnessImage
+                      image: nginx
+                      shell: Bash
+                      command: echo "Hello World"
+      - stage:
+          name: on-prem
+          identifier: onprem
+          description: ""
+          type: Deployment
+          spec:
+            deploymentType: Kubernetes
+            environment:
+              environmentRef: test
+              deployToAll: false
+              infrastructureDefinitions:
+                - identifier: test
+            service:
+              serviceRef: tst
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: <+input>
+                        sources: <+input>
+            execution:
+              steps:
+                - step:
+                    type: ShellScript
+                    name: ShellScript_1
+                    identifier: ShellScript_1
+                    spec:
+                      shell: Bash
+                      executionTarget: {}
+                      source:
+                        type: Inline
+                        spec:
+                          script: echo "Hello World"
+                      environmentVariables: []
+                      outputVariables: []
+                    timeout: 10m
+              rollbackSteps: []
+          tags: {}
+          when:
+            pipelineStatus: All
+          failureStrategies:
+            - onFailure:
+                errors:
+                  - AllErrors
+                action:
+                  type: MarkAsFailure
+  versionLabel: v2
