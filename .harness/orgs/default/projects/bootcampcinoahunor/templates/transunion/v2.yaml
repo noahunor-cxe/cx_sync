@@ -119,6 +119,7 @@ template:
           tags: {}
           when:
             pipelineStatus: All
+            condition: <+pipeline.properties.ci.codebase.repoName> == "nis.fedramp.identityriskfraudpublic"
           failureStrategies:
             - onFailure:
                 errors:
