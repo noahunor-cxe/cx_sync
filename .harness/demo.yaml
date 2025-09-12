@@ -6,54 +6,6 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: testing
-        identifier: testing
-        description: ""
-        type: CI
-        spec:
-          cloneCodebase: true
-          caching:
-            enabled: true
-            override: false
-          buildIntelligence:
-            enabled: true
-          infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: account.testk8s
-              namespace: default
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              os: Linux
-          execution:
-            steps:
-              - stepGroup:
-                  name: docker
-                  identifier: docker
-                  steps:
-                    - step:
-                        type: BuildAndPushDockerRegistry
-                        name: BuildAndPushDockerRegistry_1
-                        identifier: BuildAndPushDockerRegistry_1
-                        spec:
-                          connectorRef: account.harnessImage
-                          repo: " noah1854/test"
-                          tags:
-                            - <+pipeline.sequenceId>
-                          caching: false
-                    - step:
-                        type: BuildAndPushDockerRegistry
-                        name: no push
-                        identifier: no_push
-                        spec:
-                          connectorRef: account.harnessImage
-                          repo: noah1854/test
-                          tags:
-                            - <+pipeline.sequenceId>
-                          caching: false
-        delegateSelectors:
-          - noah-delegate
-    - stage:
         name: test
         identifier: test
         description: ""
@@ -62,10 +14,19 @@ pipeline:
           execution:
             steps:
               - step:
-                  type: FilesUpload
-                  name: FilesUpload_1
-                  identifier: FilesUpload_1
-                  spec: {}
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: "<+ if (<+pipeline.status> == \"SUCCEEDED\"){ return \"The pipeline **<+pipeline.name>** completed success.\": \" The pipeline **<+pipeline.name>** completed fail.\"}>"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
         tags: {}
   properties:
     ci:
