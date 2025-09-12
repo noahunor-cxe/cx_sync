@@ -38,7 +38,7 @@ pipeline:
                                     hi <+pipeline.name> sttaus <+pipeline.triggeredBy.name>
                                     <p>You can review the build and deployment details here:<br/><+pipeline.executionUrl><br/>
                                     Thank you for your continued efforts!</p>
-                                    <+ if (<+pipeline.status> == "SUCCEEDED"){ return "The pipeline **<+pipeline.name>** completed success.": " The pipeline **<+pipeline.name>** completed fail."}>
+                                    <+ (<+pipeline.status> == "SUCCEEDED"){ return "The pipeline **<+pipeline.name>** completed success.": " The pipeline **<+pipeline.name>** completed fail."}>
                     environmentVariables: []
                     outputVariables: []
                   timeout: 10m
