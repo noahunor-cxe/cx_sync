@@ -23,7 +23,22 @@ pipeline:
                     source:
                       type: Inline
                       spec:
-                        script: "<+ if (<+pipeline.status> == \"SUCCEEDED\"){ return \"The pipeline **<+pipeline.name>** completed success.\": \" The pipeline **<+pipeline.name>** completed fail.\"}>"
+                        script: |
+                          subject: "(Pipeline Notification – Pipeline <+pipeline.name> | Status <+pipeline.status> | Stage <+stage.name>| Stage <+stage.status>)"
+                          body: |-
+                                    Hi <+pipeline.variables.techLeadName>,<br/>                 
+                                    The pipeline <strong><+pipeline.name></strong> has completed with status **<+pipeline.status>** <br/>
+                                    <p><strong>Status:</strong> <+pipeline.status><br/>
+                                    <strong>Triggered By:</strong> <+pipeline.triggeredBy.name><br/>
+                                    <strong>Build Number:</strong> <+pipeline.sequenceId><br/>
+                                    <strong>Branch:</strong> <+pipeline.sourceBranch><br/>         
+                                    <strong>End Time:</strong> <+pipeline.endTs> <br/>
+                                    <strong>Duration:</strong> <+pipeline.durationMs><p><br/>
+                                    <+pipeline.name> <+pipeline.triggeredBy.name>            
+                                    hi <+pipeline.name> sttaus <+pipeline.triggeredBy.name>
+                                    <p>You can review the build and deployment details here:<br/><+pipeline.executionUrl><br/>
+                                    Thank you for your continued efforts!</p>
+                                    <+ if (<+pipeline.status> == "SUCCEEDED"){ return "The pipeline **<+pipeline.name>** completed success.": " The pipeline **<+pipeline.name>** completed fail."}>
                     environmentVariables: []
                     outputVariables: []
                   timeout: 10m
