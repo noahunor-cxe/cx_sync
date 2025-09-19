@@ -50,6 +50,10 @@ pipeline:
                 type: MarkAsFailure
         strategy:
           matrix:
-            include: <+input>
-            maxConcurrency: <+input>.default(2)
-            nodeName: deploy_<+matrix.service>_to_<+matrix.environment>_<+matrix.infrastructure>
+            service:
+              - svc1
+              - svc2
+            env:
+              - env1
+              - env2
+            maxConcurrency: 2
