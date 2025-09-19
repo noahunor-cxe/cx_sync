@@ -56,4 +56,4 @@ pipeline:
             env:
               - env1
               - env2
-            maxConcurrency: 2
+            maxConcurrency: 1
