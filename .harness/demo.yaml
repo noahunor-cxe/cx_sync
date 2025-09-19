@@ -6,29 +6,27 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: Deploy via Matrix
-        identifier: Deploy_via_Matrix
+        name: matrix
+        identifier: matrix
+        description: ""
         type: Deployment
-        strategy:
-          matrix:
-            include: <+input>
-            maxConcurrency: <+input>.default(2)
-            nodeName: deploy_<+matrix.service>_to_<+matrix.environment>_<+matrix.infrastructure>
         spec:
           deploymentType: Kubernetes
           service:
-            serviceRef: <+matrix.service>
+            serviceRef: <+input>
+            serviceInputs: <+input>
           environment:
-            environmentRef: <+matrix.environment>
+            environmentRef: <+input>
             deployToAll: false
-            infrastructureDefinitions:
-              - identifier: <+matrix.infrastructure>
+            environmentInputs: <+input>
+            serviceOverrideInputs: <+input>
+            infrastructureDefinitions: <+input>
           execution:
             steps:
               - step:
                   type: ShellScript
-                  name: Echo
-                  identifier: Echo
+                  name: ShellScript_1
+                  identifier: ShellScript_1
                   spec:
                     shell: Bash
                     executionTarget: {}
@@ -50,3 +48,8 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
+        strategy:
+          matrix:
+            include: <+input>
+            maxConcurrency: <+input>.default(2)
+            nodeName: deploy_<+matrix.service>_to_<+matrix.environment>_<+matrix.infrastructure>
