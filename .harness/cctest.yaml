@@ -35,6 +35,7 @@ pipeline:
                     command: |-
                       echo <+pipeline.name>
                       echo "<+pipeline.name>"
+                      echo <+inputSet>
                       echo <+pipeline.inputSets.names>
                       echo "<+pipeline.inputSets.names>"
                       echo <+pipeline.inputSets[0].name>
