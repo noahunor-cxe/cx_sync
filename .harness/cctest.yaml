@@ -20,46 +20,36 @@ pipeline:
         spec:
           cloneCodebase: true
           caching:
-            enabled: true
+            enabled: false
+            paths: []
           execution:
             steps:
-              - stepGroup:
-                  name: docker
-                  identifier: docker
-                  steps:
-                    - step:
-                        type: BuildAndPushDockerRegistry
-                        name: BuildAndPushDockerRegistry_1
-                        identifier: BuildAndPushDockerRegistry_1
-                        spec:
-                          connectorRef: account.harnessImage
-                          repo: noah1854/test
-                          tags:
-                            - <+pipeline.stages.build.spec.execution.steps.custom_variables.output.outputVariables.docker_image_ver_out>
-                          caching: false
-                          additionalArgs:
-                            - "--snapshot-mode=redo"
-                            - "--tarPath=/harness/image.tar"
-                            - "--destination=<+execution.steps.custom_variables.output.outputVariables.docker_image_name_out>:<+pipeline.stages.build.spec.execution.steps.custom_variables.output.outputVariables.docker_image_ver_out>"
-                          envVariables:
-                            PLUGIN_DRY_RUN: "true"
-                            PLUGIN_BUILDX_LOAD: "false"
-                            PLUGIN_DAEMON_OFF: "true"
-                            PLUGIN_DOCKER_HOST: unix:///run/user/1000/docker.sock
-                    - step:
-                        type: BuildAndPushDockerRegistry
-                        name: Only Push
-                        identifier: Only_Push
-                        spec:
-                          connectorRef: account.harnessImage
-                          repo: noah1854/test
-                          tags:
-                            - <+pipeline.stages.build.spec.execution.steps.custom_variables.output.outputVariables.docker_image_ver_out>
-                          caching: false
-                          envVariables:
-                            PLUGIN_PUSH_ONLY: "true"
-                            DOCKER_HOST: <+pipeline.variables.docker_host>
-                            PLUGIN_DAEMON_OFF: "true"
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: nginx
+                    shell: Sh
+                    command: |-
+                      echo <+pipeline.name>
+                      echo "<+pipeline.name>"
+                      echo <+pipeline.inputSets.names>
+                      echo "<+pipeline.inputSets.names>"
+                      echo <+pipeline.inputSets[0].name>
+
+                      $inputsetname = "<+pipeline.inputSets.names>"
+                      Write-Host "checking the inputsetname $inputsetname"
+
+                      Write-Host "checking1 "<+pipeline.inputSets[0].name>"
+                      Write-Host "checking2 "<+pipeline.inputSets[1].name>"
+
+
+
+
+                      $inputsetname = "<+inputSet.name>"
+                      Write-Host "Input set used: $inputsetname"
           infrastructure:
             type: KubernetesDirect
             spec:
@@ -69,6 +59,8 @@ pipeline:
               automountServiceAccountToken: true
               nodeSelector: {}
               os: Linux
+          buildIntelligence:
+            enabled: false
         failureStrategies:
           - onFailure:
               errors:
