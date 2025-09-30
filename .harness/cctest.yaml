@@ -29,35 +29,11 @@ pipeline:
                   identifier: test
                   steps:
                     - step:
-                        type: Run
                         name: Run_1
                         identifier: Run_1
-                        spec:
-                          connectorRef: account.harnessImage
-                          image: nginx
-                          shell: Sh
-                          command: |-
-                            echo <+pipeline.name>
-                            echo "<+pipeline.name>"
-                            echo <+project.identifier>
-                            echo "<+project.identifier>"
-                            echo <+inputSet>
-                            echo <+pipeline.inputSets.names>
-                            echo "<+pipeline.inputSets.names>"
-                            echo <+pipeline.inputSets[0].name>
-
-
-
-
-                            $inputsetname = "<+inputSet.name>"
-                            Write-Host "Input set used: $inputsetname"
-
-
-                            python /script/uploadBuildEvidence.py \
-                                                --harness_project_id "<+project.identifier>" \
-                                                --project_name "<+variable.project_code>" \
-                                                --repository_name "<+pipeline.variables.repo_name>" \
-                                                --execution_url "<+pipeline.executionUrl>" | tee .harness_data/build_info_output.json
+                        template:
+                          templateRef: container_scan
+                          versionLabel: v1
           infrastructure:
             type: KubernetesDirect
             spec:
