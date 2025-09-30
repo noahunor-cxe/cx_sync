@@ -24,35 +24,33 @@ pipeline:
             paths: []
           execution:
             steps:
-              - step:
-                  type: Run
-                  name: Run_1
-                  identifier: Run_1
-                  spec:
-                    connectorRef: account.harnessImage
-                    image: nginx
-                    shell: Sh
-                    command: |-
-                      echo <+pipeline.name>
-                      echo "<+pipeline.name>"
-                      echo <+project.identifier>
-                      echo "<+project.identifier">
-                      echo <+inputSet>
-                      echo <+pipeline.inputSets.names>
-                      echo "<+pipeline.inputSets.names>"
-                      echo <+pipeline.inputSets[0].name>
-
-                      $inputsetname = "<+pipeline.inputSets.names>"
-                      Write-Host "checking the inputsetname $inputsetname"
-
-                      Write-Host "checking1 "<+pipeline.inputSets[0].name>"
-                      Write-Host "checking2 "<+pipeline.inputSets[1].name>"
+              - stepGroup:
+                  name: test
+                  identifier: test
+                  steps:
+                    - step:
+                        type: Run
+                        name: Run_1
+                        identifier: Run_1
+                        spec:
+                          connectorRef: account.harnessImage
+                          image: nginx
+                          shell: Sh
+                          command: |-
+                            echo <+pipeline.name>
+                            echo "<+pipeline.name>"
+                            echo <+project.identifier>
+                            echo "<+project.identifier">
+                            echo <+inputSet>
+                            echo <+pipeline.inputSets.names>
+                            echo "<+pipeline.inputSets.names>"
+                            echo <+pipeline.inputSets[0].name>
 
 
 
 
-                      $inputsetname = "<+inputSet.name>"
-                      Write-Host "Input set used: $inputsetname"
+                            $inputsetname = "<+inputSet.name>"
+                            Write-Host "Input set used: $inputsetname"
           infrastructure:
             type: KubernetesDirect
             spec:
