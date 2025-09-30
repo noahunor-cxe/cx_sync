@@ -35,6 +35,8 @@ pipeline:
                     command: |-
                       echo <+pipeline.name>
                       echo "<+pipeline.name>"
+                      echo <+project.identifier
+                      echo "<+project.identifier"
                       echo <+inputSet>
                       echo <+pipeline.inputSets.names>
                       echo "<+pipeline.inputSets.names>"
