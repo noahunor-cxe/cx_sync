@@ -34,6 +34,12 @@ pipeline:
                         template:
                           templateRef: container_scan
                           versionLabel: v1
+              - stepGroup:
+                  name: work
+                  identifier: work
+                  template:
+                    templateRef: account.work
+                    versionLabel: v1
           infrastructure:
             type: KubernetesDirect
             spec:
