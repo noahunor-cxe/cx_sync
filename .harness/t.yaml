@@ -37,3 +37,5 @@ service:
   gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: bootcampcinoahunor
+  tags:
+    service1: ""
