@@ -3,3 +3,5 @@ service:
   identifier: test56
   orgIdentifier: default
   projectIdentifier: bootcampcinoahunor
+  tags:
+    service2: ""
