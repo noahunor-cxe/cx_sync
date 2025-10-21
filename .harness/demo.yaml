@@ -6,21 +6,50 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: matrix
-        identifier: matrix
+        name: testing
+        identifier: testing
         description: ""
         type: Deployment
         spec:
           deploymentType: Kubernetes
-          service:
-            serviceRef: <+input>
-            serviceInputs: <+input>
-          environment:
-            environmentRef: <+input>
-            deployToAll: false
-            environmentInputs: <+input>
-            serviceOverrideInputs: <+input>
-            infrastructureDefinitions: <+input>
+          services:
+            values:
+              - serviceRef: tst
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      artifacts:
+                        primary:
+                          primaryArtifactRef: <+input>
+                          sources: <+input>
+              - serviceRef: test56
+            metadata:
+              parallel: true
+          environments:
+            metadata:
+              parallel: false
+            values:
+              - environmentRef: tst
+                filters:
+                  - identifier: test
+                    type: tags
+                    entities:
+                      - infrastructures
+                    spec:
+                      tags: |
+                        infrastructure.tags.allowedService == <+service.tags.targetInfra>
+                      matchType: all
+              - environmentRef: test
+                filters:
+                  - identifier: test
+                    type: tags
+                    entities:
+                      - infrastructures
+                    spec:
+                      tags: |
+                        infrastructure.tags.allowedService == <+service.tags.targetInfra>
+                      matchType: all
           execution:
             steps:
               - step:
@@ -33,10 +62,9 @@ pipeline:
                     source:
                       type: Inline
                       spec:
-                        script: |
-                          echo "Service=<+matrix.service>"
-                          echo "Env=<+matrix.environment>"
-                          echo "Infra=<+matrix.infrastructure>"
+                        script: |-
+                          echo "hello world"
+                          echo "I am service 1/2"
                     environmentVariables: []
                     outputVariables: []
                   timeout: 10m
@@ -48,12 +76,3 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
-        strategy:
-          matrix:
-            service:
-              - svc1
-              - svc2
-            env:
-              - env1
-              - env2
-            maxConcurrency: 1
