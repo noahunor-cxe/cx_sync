@@ -68,7 +68,7 @@ pipeline:
                     environmentVariables:
                       - name: test
                         type: Secret
-                        value: <+input>
+                        value: account.docker-connector
                     outputVariables:
                       - name: test
                         type: Secret
