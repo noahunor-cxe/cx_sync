@@ -65,8 +65,14 @@ pipeline:
                         script: |-
                           echo "hello world"
                           echo "I am service 1/2"
-                    environmentVariables: []
-                    outputVariables: []
+                    environmentVariables:
+                      - name: test
+                        type: Secret
+                        value: <+input>
+                    outputVariables:
+                      - name: test
+                        type: Secret
+                        value: <+input>
                   timeout: 10m
             rollbackSteps: []
         tags: {}
