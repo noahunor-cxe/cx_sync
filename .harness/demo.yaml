@@ -28,15 +28,27 @@ pipeline:
           execution:
             steps:
               - step:
-                  type: RestoreCacheS3
-                  name: RestoreCacheS3_1
-                  identifier: RestoreCacheS3_1
+                  type: GitClone
+                  name: GitClone_1
+                  identifier: GitClone_1
                   spec:
-                    connectorRef: account.AWS_Connector
-                    region: us-east-1
-                    bucket: noah-cur-test
-                    key: cache-test-dns-{{ checksum "package.json" }}
-                    archiveFormat: Tar
+                    connectorRef: testconn
+                    repoName: cx_sync
+                    build:
+                      type: branch
+                      spec:
+                        branch: main
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: nginx
+                    shell: Sh
+                    command: git clone "test"
+                    envVariables:
+                      branch: <+codebase.branch>
         failureStrategies:
           - onFailure:
               errors:
