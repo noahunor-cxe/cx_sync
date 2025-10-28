@@ -6,79 +6,45 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: testing
-        identifier: testing
+        name: test
+        identifier: test
         description: ""
-        type: Deployment
+        type: CI
         spec:
-          deploymentType: Kubernetes
-          services:
-            values:
-              - serviceRef: tst
-                serviceInputs:
-                  serviceDefinition:
-                    type: Kubernetes
-                    spec:
-                      artifacts:
-                        primary:
-                          primaryArtifactRef: <+input>
-                          sources: <+input>
-              - serviceRef: test56
-            metadata:
-              parallel: true
-          environments:
-            metadata:
-              parallel: false
-            values:
-              - environmentRef: tst
-                filters:
-                  - identifier: test
-                    type: tags
-                    entities:
-                      - infrastructures
-                    spec:
-                      tags: |
-                        infrastructure.tags.allowedService == <+service.tags.targetInfra>
-                      matchType: all
-              - environmentRef: test
-                filters:
-                  - identifier: test
-                    type: tags
-                    entities:
-                      - infrastructures
-                    spec:
-                      tags: |
-                        infrastructure.tags.allowedService == <+service.tags.targetInfra>
-                      matchType: all
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: prod
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
           execution:
             steps:
               - step:
-                  type: ShellScript
-                  name: ShellScript_1
-                  identifier: ShellScript_1
+                  type: RestoreCacheS3
+                  name: RestoreCacheS3_1
+                  identifier: RestoreCacheS3_1
                   spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: |-
-                          echo "hello world"
-                          echo "I am service 1/2"
-                    environmentVariables:
-                      - name: test
-                        type: Secret
-                        value: account.docker-connector
-                    outputVariables:
-                      - name: test
-                        type: Secret
-                        value: <+input>
-                  timeout: 10m
-            rollbackSteps: []
-        tags: {}
+                    connectorRef: account.AWS_Connector
+                    region: us-east-1
+                    bucket: noah-cur-test
+                    key: cache-test-dns-{{ checksum "package.json" }}
+                    archiveFormat: Tar
         failureStrategies:
           - onFailure:
               errors:
                 - AllErrors
               action:
                 type: MarkAsFailure
+  properties:
+    ci:
+      codebase:
+        repoName: test
+        build: <+input>
