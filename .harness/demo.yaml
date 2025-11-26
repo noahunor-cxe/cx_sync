@@ -9,88 +9,26 @@ pipeline:
         name: test
         identifier: test
         description: ""
-        type: CI
+        type: Custom
         spec:
-          cloneCodebase: true
-          caching:
-            enabled: true
-            override: false
-          buildIntelligence:
-            enabled: true
-          infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: prod
-              namespace: default
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              os: Linux
+          environment:
+            environmentRef: test
+            deployToAll: false
+            infrastructureDefinitions: <+input>
           execution:
             steps:
               - step:
-                  type: GitClone
-                  name: GitClone_1
-                  identifier: GitClone_1
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
                   spec:
-                    connectorRef: testconn
-                    repoName: cx_sync
-                    build:
-                      type: branch
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
                       spec:
-                        branch: main
-              - step:
-                  type: Run
-                  name: Run_1
-                  identifier: Run_1
-                  spec:
-                    connectorRef: account.harnessImage
-                    image: nginx
-                    shell: Sh
-                    command: git clone "test"
-                    envVariables:
-                      branch: <+codebase.branch>
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsFailure
-        delegateSelectors:
-          - noah-delegate
-    - stage:
-        name: steps
-        identifier: steps
-        description: ""
-        type: Approval
-        spec:
-          execution:
-            steps:
-              - step:
-                  name: de
-                  identifier: de
-                  type: HarnessApproval
-                  timeout: 1d
-                  spec:
-                    approvalMessage: |-
-                      Please review the following information
-                      and approve the pipeline progression
-                    includePipelineExecutionHistory: true
-                    approvers:
-                      minimumCount: 1
-                      disallowPipelineExecutor: false
-                      userGroups:
-                        - account._account_all_users
-                    isAutoRejectEnabled: false
-                    approverInputs: []
+                        script: echo "Hello"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
         tags: {}
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: MarkAsFailure
-  properties:
-    ci:
-      codebase:
-        repoName: test
-        build: <+input>
