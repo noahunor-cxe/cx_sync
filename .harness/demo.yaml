@@ -27,8 +27,16 @@ pipeline:
                     source:
                       type: Inline
                       spec:
-                        script: echo "Hello"
+                        script: |-
+                          echo "Hello World"
+                          cd dance
                     environmentVariables: []
                     outputVariables: []
                   timeout: 10m
         tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsSuccess
