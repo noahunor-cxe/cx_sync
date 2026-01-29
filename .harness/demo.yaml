@@ -89,6 +89,7 @@ pipeline:
                       done
 
                       docker pull dot-docker-release-local.artifactory.devops.dnb.net:5000/harness/harness_googleca_amazoncorretto_11:1.0
+                    privileged: true
               - step:
                   type: BuildAndPushDockerRegistry
                   name: BuildAndPushDockerRegistry_1
