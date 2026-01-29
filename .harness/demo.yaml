@@ -50,6 +50,7 @@ pipeline:
           caching:
             enabled: true
             override: false
+            paths: []
           buildIntelligence:
             enabled: true
           infrastructure:
@@ -68,7 +69,7 @@ pipeline:
                   identifier: Run_1
                   spec:
                     connectorRef: account.harnessImage
-                    image: alpine:3.19
+                    image: docker:25.0.4
                     shell: Sh
                     command: |-
                       cat > Dockerfile <<'EOF'
@@ -79,6 +80,13 @@ pipeline:
 
                       echo "Dockerfile created:"
                       cat Dockerfile
+
+                      set -e
+
+                      while ! docker ps >/dev/null 2>&1; do
+                        echo "Docker not available yet"
+                        sleep 2
+                      done
 
                       docker pull dot-docker-release-local.artifactory.devops.dnb.net:5000/harness/harness_googleca_amazoncorretto_11:1.0
               - step:
@@ -94,6 +102,9 @@ pipeline:
                     envVariables:
                       PLUGIN_PLATFORM: linux/amd64,linux/arm64
                       PLUGIN_BUILDER_DRIVER: docker-container
+          sharedPaths:
+            - /var/run
+            - /var/lib/docker
         delegateSelectors:
           - noah-delegate
   properties:
