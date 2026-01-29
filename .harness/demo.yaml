@@ -40,3 +40,59 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsSuccess
+    - stage:
+        name: run
+        identifier: run
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: prod
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: alpine:3.19
+                    shell: Sh
+                    command: |-
+                      cat > Dockerfile <<'EOF'
+                      FROM nginx:stable-alpine
+                      RUN echo "hello multiarch" > /usr/share/nginx/html/index.html
+                      EOF
+
+                      echo "Dockerfile created:"
+                      cat Dockerfile
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    repo: test
+                    tags:
+                      - multiarch-test
+                    caching: true
+                    envVariables:
+                      PLUGIN_PLATFORM: linux/amd64,linux/arm64
+                      PLUGIN_BUILDER_DRIVER: docker-container
+  properties:
+    ci:
+      codebase:
+        repoName: test
+        build: <+input>
