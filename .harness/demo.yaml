@@ -64,6 +64,16 @@ pipeline:
           execution:
             steps:
               - step:
+                  type: Background
+                  name: dind
+                  identifier: dind
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: docker:25.0.4
+                    shell: Sh
+                    privileged: true
+                contextType: Pipeline
+              - step:
                   type: Run
                   name: Run_1
                   identifier: Run_1
