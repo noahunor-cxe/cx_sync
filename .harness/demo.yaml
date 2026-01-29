@@ -104,6 +104,8 @@ pipeline:
                     envVariables:
                       PLUGIN_PLATFORM: linux/amd64,linux/arm64
                       PLUGIN_BUILDER_DRIVER: docker-container
+                    baseImageConnectorRefs:
+                      - account.harnessImage
           sharedPaths:
             - /var/run
             - /var/lib/docker
