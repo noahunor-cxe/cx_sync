@@ -90,14 +90,6 @@ pipeline:
 
                       echo "Dockerfile created:"
                       cat Dockerfile
-
-                      docker buildx build \
-                        --platform linux/amd64,linux/arm64 \
-                        -t corretto-multiarch:test \
-                        --provenance=false \
-                        --sbom=false \
-                        --load \
-                        .
                     privileged: true
               - step:
                   type: BuildAndPushDockerRegistry
