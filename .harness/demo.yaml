@@ -72,12 +72,15 @@ pipeline:
                     shell: Sh
                     command: |-
                       cat > Dockerfile <<'EOF'
-                      FROM nginx:stable-alpine
-                      RUN echo "hello multiarch" > /usr/share/nginx/html/index.html
+                      FROM dot-docker-release-local.artifactory.devops.dnb.net:5000/harness/harness_googleca_amazoncorretto_11:1.0
+                      RUN uname -m || true
+                      RUN java -version || true
                       EOF
 
                       echo "Dockerfile created:"
                       cat Dockerfile
+
+                      docker pull dot-docker-release-local.artifactory.devops.dnb.net:5000/harness/harness_googleca_amazoncorretto_11:1.0
               - step:
                   type: BuildAndPushDockerRegistry
                   name: BuildAndPushDockerRegistry_1
