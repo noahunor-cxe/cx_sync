@@ -91,6 +91,8 @@ pipeline:
                     envVariables:
                       PLUGIN_PLATFORM: linux/amd64,linux/arm64
                       PLUGIN_BUILDER_DRIVER: docker-container
+        delegateSelectors:
+          - noah-delegate
   properties:
     ci:
       codebase:
