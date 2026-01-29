@@ -83,34 +83,21 @@ pipeline:
                     shell: Sh
                     command: |-
                       cat > Dockerfile <<'EOF'
-                      FROM dot-docker-release-local.artifactory.devops.dnb.net:5000/harness/harness_googleca_amazoncorretto_11:1.0
-                      RUN uname -m || true
-                      RUN java -version || true
+                      FROM amazoncorretto:17-alpine
+                      RUN uname -m
+                      RUN java -version
                       EOF
 
                       echo "Dockerfile created:"
                       cat Dockerfile
 
-                      set -e
-
-                      while ! docker ps >/dev/null 2>&1; do
-                        echo "Docker not available yet"
-                        sleep 2
-                      done
-
-                      echo ""
-                      echo "=== Step A: DNS resolution check ==="
-                      nslookup dot-docker-release-local.artifactory.devops.dnb.net || true
-
-                      echo ""
-                      echo "=== Step B: Reachability check (HTTP to /v2/) ==="
-                      # This tells you if the registry endpoint is reachable at all (even if it returns 401)
-                      wget -S -O- --spider \
-                        https://dot-docker-release-local.artifactory.devops.dnb.net:5000/v2/ 2>&1 || true
-
-                      echo ""
-                      echo "=== Step C: Actual docker pull ==="
-                      docker pull dot-docker-release-local.artifactory.devops.dnb.net:5000/harness/harness_googleca_amazoncorretto_11:1.0
+                      docker buildx build \
+                        --platform linux/amd64,linux/arm64 \
+                        -t corretto-multiarch:test \
+                        --provenance=false \
+                        --sbom=false \
+                        --load \
+                        .
                     privileged: true
               - step:
                   type: BuildAndPushDockerRegistry
