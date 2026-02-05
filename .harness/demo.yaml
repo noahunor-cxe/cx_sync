@@ -133,7 +133,7 @@ pipeline:
                           spec:
                             type: docker
                             spec:
-                              tag: ""
+                              tag: "1.25"
           environment:
             environmentRef: tst
             deployToAll: false
