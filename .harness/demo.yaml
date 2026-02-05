@@ -126,8 +126,14 @@ pipeline:
                 spec:
                   artifacts:
                     primary:
-                      primaryArtifactRef: <+input>
-                      sources: <+input>
+                      primaryArtifactRef: test
+                      sources:
+                        - identifier: test
+                          type: Har
+                          spec:
+                            type: docker
+                            spec:
+                              tag: ""
           environment:
             environmentRef: tst
             deployToAll: false
