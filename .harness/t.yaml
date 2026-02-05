@@ -32,7 +32,7 @@ service:
                 registryRef: account.test
                 type: docker
                 spec:
-                  imagePath: test
+                  imagePath: nginx
                   tag: <+input>
                   digest: ""
   gitOpsEnabled: false
