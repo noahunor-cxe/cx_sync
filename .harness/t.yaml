@@ -26,14 +26,15 @@ service:
         primary:
           primaryArtifactRef: <+input>
           sources:
-            - spec:
-                connectorRef: test9
-                artifactPath: harnesscx-docker/
-                tag: <+input>
-                repository: harnesscx-docker
-                repositoryFormat: docker
-              identifier: tst
-              type: ArtifactoryRegistry
+            - identifier: test
+              type: Har
+              spec:
+                registryRef: account.test
+                type: docker
+                spec:
+                  imagePath: test
+                  tag: <+input>
+                  digest: ""
   gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: bootcampcinoahunor
