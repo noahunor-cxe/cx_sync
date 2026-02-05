@@ -111,6 +111,12 @@ pipeline:
             - /var/lib/docker
         delegateSelectors:
           - noah-delegate
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: Ignore
     - stage:
         name: test0
         identifier: test0
