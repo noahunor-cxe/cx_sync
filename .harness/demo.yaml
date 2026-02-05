@@ -111,6 +111,78 @@ pipeline:
             - /var/lib/docker
         delegateSelectors:
           - noah-delegate
+    - stage:
+        name: test0
+        identifier: test0
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: tst
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: tst
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tst
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: ShellScript_1
+                  identifier: ShellScript_1
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: |+
+                          #!/usr/bin/env bash
+                          set -euo pipefail
+
+                          echo "=== Secret resolution test started ==="
+
+                          SECRET_VALUE='<+secrets.getValue("special-character")>'
+
+                          echo "Secret resolved successfully"
+
+                          echo "Secret length:"
+                          echo "${#SECRET_VALUE}"
+
+                          ENCODED=$(printf '%s' "$SECRET_VALUE" | base64)
+                          echo "Base64 encoding succeeded"
+
+                          DECODED=$(printf '%s' "$ENCODED" | base64 --decode)
+
+                          if [[ "$DECODED" == "$SECRET_VALUE" ]]; then
+                            echo "Round-trip encode/decode: OK"
+                          else
+                            echo "Round-trip encode/decode: FAILED"
+                            exit 1
+                          fi
+
+                          echo "=== Secret test completed successfully ==="
+
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
   properties:
     ci:
       codebase:
