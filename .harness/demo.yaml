@@ -195,6 +195,26 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
+    - stage:
+        name: h
+        identifier: h
+        template:
+          templateRef: gg
+          versionLabel: g
+          templateInputs:
+            type: CI
+            spec:
+              infrastructure:
+                type: KubernetesDirect
+                spec:
+                  namespace: <+input>
+              execution:
+                steps:
+                  - step:
+                      identifier: Test_1
+                      type: Test
+                      spec:
+                        image: <+input>
   properties:
     ci:
       codebase:
