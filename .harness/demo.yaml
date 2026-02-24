@@ -124,22 +124,6 @@ pipeline:
         type: Deployment
         spec:
           deploymentType: Kubernetes
-          service:
-            serviceRef: tst
-            serviceInputs:
-              serviceDefinition:
-                type: Kubernetes
-                spec:
-                  artifacts:
-                    primary:
-                      primaryArtifactRef: test
-                      sources:
-                        - identifier: test
-                          type: Har
-                          spec:
-                            type: docker
-                            spec:
-                              tag: "1.25"
           environment:
             environmentRef: tst
             deployToAll: false
@@ -188,6 +172,10 @@ pipeline:
                     outputVariables: []
                   timeout: 10m
             rollbackSteps: []
+          services:
+            values: <+input>
+            metadata:
+              parallel: <+input>
         tags: {}
         failureStrategies:
           - onFailure:
@@ -215,6 +203,47 @@ pipeline:
                       type: Test
                       spec:
                         image: <+input>
+    - stage:
+        name: dev
+        identifier: dev
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: <+input>
+            serviceInputs: <+input>
+          environment:
+            environmentRef: <+input>
+            deployToAll: false
+            environmentInputs: <+input>
+            serviceOverrideInputs: <+input>
+            infrastructureDefinitions: <+input>
+          execution:
+            steps:
+              - step:
+                  name: Rollout Deployment
+                  identifier: rolloutDeployment
+                  type: K8sRollingDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+            rollbackSteps:
+              - step:
+                  name: Rollback Rollout Deployment
+                  identifier: rollbackRolloutDeployment
+                  type: K8sRollingRollback
+                  timeout: 10m
+                  spec:
+                    pruningEnabled: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
   properties:
     ci:
       codebase:
