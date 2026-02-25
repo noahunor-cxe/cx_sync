@@ -202,7 +202,7 @@ pipeline:
           userGroups: []
           recipients:
             - noah.unor99@gmail.com
-      enabled: true
+      enabled: false
       template:
         versionLabel: v1
         templateRef: test
