@@ -248,3 +248,23 @@ pipeline:
       codebase:
         repoName: test
         build: <+input>
+  notificationRules:
+    - name: test
+      identifier: test
+      pipelineEvents:
+        - type: PipelineStart
+        - type: PipelineFailed
+        - type: PipelineSuccess
+        - type: PipelineEnd
+      notificationMethod:
+        type: Email
+        spec:
+          userGroups: []
+          recipients:
+            - noah.unor99@gmail.com
+      enabled: true
+      template:
+        versionLabel: v1
+        templateRef: test
+        orgIdentifier: default
+        projectIdentifier: bootcampcinoahunor
