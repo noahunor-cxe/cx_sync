@@ -199,9 +199,10 @@ pipeline:
       notificationMethod:
         type: Email
         spec:
-          userGroups: []
+          userGroups:
+            - boss
           recipients:
-            - noah.unor99@gmail.com
+            - noah.unor@harness.io
       enabled: true
       template:
         versionLabel: v1
