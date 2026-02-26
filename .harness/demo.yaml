@@ -203,9 +203,10 @@ pipeline:
             - boss
           recipients:
             - noah.unor@harness.io
+          executeOnDelegate: true
       enabled: true
       template:
-        versionLabel: v1
-        templateRef: test
+        versionLabel: v0
+        templateRef: emailtemplate
         orgIdentifier: default
         projectIdentifier: bootcampcinoahunor
