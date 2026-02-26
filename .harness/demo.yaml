@@ -174,7 +174,7 @@ pipeline:
           environmentGroup:
             envGroupRef: <+input>
             metadata:
-              parallel: true
+              parallel: false
             deployToAll: <+input>
             environments: <+input>
         tags: {}
