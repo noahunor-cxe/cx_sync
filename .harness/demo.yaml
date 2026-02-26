@@ -193,12 +193,8 @@ pipeline:
     - name: test
       identifier: test
       pipelineEvents:
-        - type: PipelineSuccess
         - type: PipelineEnd
-        - type: StageSuccess
-          forStages:
-            - test
-            - run
+        - type: PipelineStart
       notificationMethod:
         type: Email
         spec:
