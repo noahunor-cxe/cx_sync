@@ -124,11 +124,6 @@ pipeline:
         type: Deployment
         spec:
           deploymentType: Kubernetes
-          environment:
-            environmentRef: tst
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: tst
           execution:
             steps:
               - step:
@@ -176,6 +171,12 @@ pipeline:
             values: <+input>
             metadata:
               parallel: <+input>
+          environmentGroup:
+            envGroupRef: <+input>
+            metadata:
+              parallel: true
+            deployToAll: <+input>
+            environments: <+input>
         tags: {}
         failureStrategies:
           - onFailure:
