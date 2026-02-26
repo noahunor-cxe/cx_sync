@@ -193,10 +193,12 @@ pipeline:
     - name: test
       identifier: test
       pipelineEvents:
-        - type: PipelineStart
-        - type: PipelineFailed
         - type: PipelineSuccess
         - type: PipelineEnd
+        - type: StageSuccess
+          forStages:
+            - test
+            - run
       notificationMethod:
         type: Email
         spec:
@@ -204,7 +206,6 @@ pipeline:
             - boss
           recipients:
             - noah.unor@harness.io
-          executeOnDelegate: true
       enabled: true
       template:
         versionLabel: v0
