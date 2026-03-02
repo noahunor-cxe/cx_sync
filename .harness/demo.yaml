@@ -184,6 +184,34 @@ pipeline:
                 - AllErrors
               action:
                 type: MarkAsFailure
+    - stage:
+        name: tst
+        identifier: tst
+        tags: {}
+        template:
+          templateRef: test_cascading_secret1
+          versionLabel: v1
+          templateInputs:
+            type: Deployment
+            spec:
+              execution:
+                steps:
+                  - insert:
+                      identifier: tst
+                      steps: <+input>
+              service:
+                serviceInputs:
+                  serviceDefinition:
+                    type: Kubernetes
+                    spec:
+                      artifacts:
+                        primary:
+                          primaryArtifactRef: <+input>
+                          sources: <+input>
+            variables:
+              - name: secretInput
+                type: Secret
+                value: <+input>
   properties:
     ci:
       codebase:
