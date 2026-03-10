@@ -32,9 +32,9 @@ pipeline:
                   name: Run_1
                   identifier: Run_1
                   spec:
-                    registryRef: account.test
-                    image: nginx
-                    shell: Bash
+                    connectorRef: account.harnessImage
+                    image: docker:25.0.4
+                    shell: Sh
                     command: |-
                       echo "Hello World"
                       export MY_MESSAGE="Hello from step output"
