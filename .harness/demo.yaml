@@ -34,8 +34,9 @@ pipeline:
                   spec:
                     registryRef: account.test
                     image: nginx
-                    shell: Sh
+                    shell: Bash
                     command: |-
+                      echo "Hello World"
                       export MY_MESSAGE="Hello from step output"
                                 echo "MY_MESSAGE: $MY_MESSAGE"
                     outputVariables:
