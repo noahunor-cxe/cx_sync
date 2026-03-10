@@ -6,6 +6,52 @@ pipeline:
   tags: {}
   stages:
     - stage:
+        name: notification
+        identifier: notification
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: prod
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    registryRef: account.test
+                    image: nginx
+                    shell: Sh
+                    command: |-
+                      export MY_MESSAGE="Hello from step output"
+                                echo "MY_MESSAGE: $MY_MESSAGE"
+                    outputVariables:
+                      - name: MY_MESSAGE
+                        type: String
+                        value: MY_MESSAGE
+                    outputAlias:
+                      key: EXPORTED
+                      scope: Pipeline
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
+    - stage:
         name: test
         identifier: test
         description: ""
