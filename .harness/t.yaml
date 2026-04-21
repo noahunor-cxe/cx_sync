@@ -33,7 +33,7 @@ service:
                 type: docker
                 spec:
                   imagePath: nginx
-                  tag: <+input>
+                  tag: <+input>.selectOneFrom(ignore)
                   digest: ""
   gitOpsEnabled: false
   orgIdentifier: default
