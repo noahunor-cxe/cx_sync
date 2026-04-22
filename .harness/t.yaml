@@ -33,7 +33,7 @@ service:
                 type: docker
                 spec:
                   imagePath: nginx
-                  tag: ignore
+                  tag: "1.25"
                   digest: ""
   gitOpsEnabled: false
   orgIdentifier: default
