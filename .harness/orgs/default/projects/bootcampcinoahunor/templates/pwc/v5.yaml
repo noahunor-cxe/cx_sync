@@ -60,5 +60,5 @@ template:
           identifier: Run_2
           spec:
             shell: Sh
-            command: echo "help 1"
+            command: echo "help 2"
   versionLabel: v5
