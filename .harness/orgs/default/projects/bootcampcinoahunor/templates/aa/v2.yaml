@@ -1,0 +1,50 @@
+template:
+  name: aa
+  identifier: aa
+  versionLabel: v2
+  type: Pipeline
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    stages:
+      - stage:
+          name: test
+          identifier: test
+          description: ""
+          type: Deployment
+          spec:
+            deploymentType: Kubernetes
+            environment:
+              environmentRef: tst
+              deployToAll: false
+              infrastructureDefinitions:
+                - identifier: tst
+            service:
+              serviceRef: tst
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: <+input>
+                        sources: <+input>
+            execution:
+              steps:
+                - step:
+                    type: K8sRollingDeploy
+                    name: K8sRollingDeploy_2
+                    identifier: K8sRollingDeploy_2
+                    spec:
+                      skipDryRun: false
+                      pruningEnabled: false
+                    timeout: 30m
+              rollbackSteps: []
+          tags: {}
+          failureStrategies:
+            - onFailure:
+                errors:
+                  - ignore
+                action:
+                  type: MarkAsFailure
