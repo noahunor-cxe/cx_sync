@@ -1,0 +1,234 @@
+template:
+  name: full-review
+  identifier: fullreview
+  versionLabel: v1
+  type: Pipeline
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    properties:
+      ci:
+        codebase:
+          repoName: test
+          build: <+input>
+    stages:
+      - stage:
+          name: CI build and security gate
+          identifier: CI_build_and_security_gate
+          description: ""
+          type: CI
+          spec:
+            cloneCodebase: true
+            caching:
+              enabled: false
+              override: false
+              paths: []
+            buildIntelligence:
+              enabled: false
+            infrastructure:
+              type: KubernetesDirect
+              spec:
+                connectorRef: <+input>
+                namespace: <+input>
+                automountServiceAccountToken: true
+                nodeSelector: {}
+                os: Linux
+            execution:
+              steps:
+                - step:
+                    type: Run
+                    name: NPM Build
+                    identifier: NPM_Build
+                    spec:
+                      connectorRef: <+input>
+                      image: <+input>
+                      shell: Sh
+                      command: pass
+                - step:
+                    type: Run
+                    name: Unit tests
+                    identifier: Unit_tests
+                    spec:
+                      connectorRef: <+input>
+                      image: <+input>
+                      shell: Sh
+                      command: <+input>
+                      resources:
+                        limits:
+                          memory: <+input>
+                          cpu: <+input>
+                - step:
+                    type: Sonarqube
+                    name: SonarQube Scans
+                    identifier: SonarQube_Scans
+                    spec:
+                      mode: orchestration
+                      config: default
+                      target:
+                        type: repository
+                        workspace: /harness
+                        detection: manual
+                        name: <+input>
+                        variant: <+input>
+                      advanced:
+                        log:
+                          level: info
+                        args:
+                          cli: <+input>
+                      resources:
+                        limits:
+                          memory: <+input>
+                          cpu: <+input>
+                      auth:
+                        access_token: <+input>
+                        domain: <+input>
+                        ssl: true
+                      tool:
+                        project_key: <+input>
+                - step:
+                    type: BuildAndPushECR
+                    name: Build and Push to INT ECR
+                    identifier: Build_and_Push_to_INT_ECR
+                    spec:
+                      connectorRef: <+input>
+                      region: <+input>
+                      account: <+input>
+                      imageName: <+input>
+                      tags:
+                        - latest
+                      caching: <+input>
+                - step:
+                    type: Run
+                    name: Orca SBOM and Vulnerability Gate
+                    identifier: Orca_SBOM_and_Vulnerability_Gate
+                    spec:
+                      connectorRef: <+input>
+                      image: orcasecurity/orca-cli:latest
+                      shell: Sh
+                      command: <+input>
+                - step:
+                    type: Run
+                    name: Database Migration
+                    identifier: Database_Migration
+                    spec:
+                      connectorRef: <+input>
+                      image: <+input>
+                      shell: Sh
+                      command: <+input>
+      - stage:
+          name: DeployINT
+          identifier: DeployINT
+          description: ""
+          type: Deployment
+          spec:
+            deploymentType: ECS
+            environment:
+              environmentRef: <+input>
+              deployToAll: false
+              environmentInputs: <+input>
+              serviceOverrideInputs: <+input>
+              infrastructureDefinitions: <+input>
+            service:
+              serviceRef: <+input>
+              serviceInputs: <+input>
+              failureStrategies:
+                - onFailure:
+                    errors:
+                      - AllErrors
+                    action:
+                      type: PipelineRollback
+            execution:
+              steps:
+                - step:
+                    type: Run
+                    name: Confirm Image in INT ECR
+                    identifier: Run_1
+                    spec:
+                      connectorRef: <+input>
+                      image: amazon/aws-cli:latest
+                      shell: <+input>
+                      command: <+input>
+                - step:
+                    type: EcsRollingDeploy
+                    name: EcsRollingDeploy_1
+                    identifier: EcsRollingDeploy_1
+                    spec:
+                      sameAsAlreadyRunningInstances: false
+                      forceNewDeployment: false
+                    timeout: <+input>
+                - step:
+                    type: Container
+                    name: CloudFront Cache Invalidation INT
+                    identifier: Container_1
+                    spec:
+                      connectorRef: <+input>
+                      image: <+input>
+                      command: <+input>
+                      shell: Sh
+                      infrastructure:
+                        type: KubernetesDirect
+                        spec:
+                          connectorRef: <+input>
+                          namespace: <+input>
+                          resources:
+                            limits:
+                              cpu: "0.5"
+                              memory: 500Mi
+                          annotations: {}
+                          labels: {}
+                          containerSecurityContext:
+                            capabilities:
+                              drop: []
+                              add: []
+                          nodeSelector: {}
+                      reports:
+                        type: JUnit
+                        spec:
+                          paths: []
+                      outputVariables: []
+                      envVariables: {}
+                    timeout: <+input>
+                - step:
+                    type: Verify
+                    name: Verify INT
+                    identifier: Verify_INT
+                    spec:
+                      isMultiServicesOrEnvs: false
+                      type: Auto
+                      monitoredService:
+                        type: Default
+                        spec: {}
+                      spec:
+                        sensitivity: LOW
+                        duration: <+input>
+                    timeout: <+input>
+                    failureStrategies:
+                      - onFailure:
+                          errors:
+                            - Verification
+                          action:
+                            type: ManualIntervention
+                            spec:
+                              timeout: 2h
+                              onTimeout:
+                                action:
+                                  type: StageRollback
+                      - onFailure:
+                          errors:
+                            - Unknown
+                          action:
+                            type: ManualIntervention
+                            spec:
+                              timeout: 2h
+                              onTimeout:
+                                action:
+                                  type: Ignore
+              rollbackSteps: []
+          tags: {}
+          failureStrategies:
+            - onFailure:
+                errors:
+                  - AllErrors
+                action:
+                  type: StageRollback
