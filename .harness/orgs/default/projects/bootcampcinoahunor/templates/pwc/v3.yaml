@@ -40,6 +40,6 @@ template:
             projectID: <+input>
             imageName: <+input>
             tags:
-              - test
+              - test1
             caching: true
   versionLabel: v3
