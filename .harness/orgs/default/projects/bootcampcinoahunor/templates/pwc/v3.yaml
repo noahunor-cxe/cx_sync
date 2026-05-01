@@ -1,0 +1,45 @@
+template:
+  name: pwc
+  identifier: pwc
+  type: StepGroup
+  projectIdentifier: bootcampcinoahunor
+  orgIdentifier: default
+  tags: {}
+  spec:
+    stageType: CI
+    steps:
+      - stepGroup:
+          name: test
+          identifier: test
+          steps:
+            - parallel:
+                - step:
+                    type: Run
+                    name: Run_1
+                    identifier: Run_1
+                    spec:
+                      shell: Sh
+                      command: mkdir lambda
+                - step:
+                    type: GitClone
+                    name: GitClone_1
+                    identifier: GitClone_1
+                    spec:
+                      repoName: test
+                      build:
+                        type: branch
+                        spec:
+                          branch: main
+      - step:
+          type: BuildAndPushGAR
+          name: BuildAndPushGAR_1
+          identifier: BuildAndPushGAR_1
+          spec:
+            connectorRef: <+input>
+            host: <+input>
+            projectID: <+input>
+            imageName: <+input>
+            tags:
+              - test
+            caching: true
+  versionLabel: v3
