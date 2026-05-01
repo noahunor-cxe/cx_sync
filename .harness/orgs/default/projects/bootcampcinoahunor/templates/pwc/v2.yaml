@@ -1,7 +1,7 @@
 template:
   name: pwc
   identifier: pwc
-  versionLabel: v1
+  versionLabel: v2
   type: StepGroup
   projectIdentifier: bootcampcinoahunor
   orgIdentifier: default
