@@ -15,8 +15,8 @@ template:
             - parallel:
                 - step:
                     type: Run
-                    name: Run_1
-                    identifier: Run_1
+                    name: fast
+                    identifier: fast
                     spec:
                       shell: Sh
                       command: mkdir lambda
