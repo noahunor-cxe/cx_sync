@@ -1,0 +1,57 @@
+inputSet:
+  name: branch_test
+  identifier: branch_test
+  orgIdentifier: default
+  projectIdentifier: bootcampcinoahunor
+  pipeline:
+    identifier: demo
+    stages:
+      - stage:
+          identifier: test
+          type: Custom
+          spec:
+            environment:
+              infrastructureDefinitions:
+                - identifier: test
+      - stage:
+          identifier: test0
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: test
+      - stage:
+          identifier: tst
+          template:
+            templateInputs:
+              type: Deployment
+              spec:
+                execution:
+                  steps:
+                    - insert:
+                        identifier: tst
+                        steps: <+input>
+                service:
+                  serviceInputs:
+                    serviceDefinition:
+                      type: Kubernetes
+                      spec:
+                        artifacts:
+                          primary:
+                            primaryArtifactRef: test
+              variables:
+                - name: secretInput
+                  type: Secret
+                  value: secret_key
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: main
